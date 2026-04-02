@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize Your Website | WEB-BOON</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <style>
+        /* ========== BASE ========== */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;overflow-x:hidden}
+        body{font-family:'Bangers',cursive;background:#FFF8F0;color:#3D2C2E;overflow-x:hidden}
+        a{text-decoration:none;color:inherit}
+        button{cursor:pointer;border:none;background:none;font-family:'Bangers',cursive}
+        ::selection{background:#FF6B35;color:#FFF}
+
+        ::-webkit-scrollbar{width:10px}
+        ::-webkit-scrollbar-track{background:#FFF8F0}
+        ::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:5px;border:2px solid #FFF8F0}
+        ::-webkit-scrollbar-thumb:hover{background:#e55a2b}
+
+        /* ========== NAVBAR ========== */
+        .navbar{position:sticky;top:0;z-index:1000;background:rgba(61,44,46,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;box-shadow:0 2px 10px rgba(0,0,0,.3);border-bottom:4px solid #000}
+        .nav-logo{font-size:36px;color:#FF6B35;letter-spacing:2px;animation:logoPop 2.5s ease-in-out infinite;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;cursor:pointer}
+        .nav-links{display:flex;align-items:center;gap:8px}
+        .nav-links a{font-size:18px;color:#FFF8F0;padding:8px 18px;border-radius:10px;border:3px solid transparent;transition:all .3s ease;letter-spacing:1px}
+        .nav-links a:hover{color:#FF6B35;border-color:#FF6B35;background:rgba(255,107,53,.1);transform:translateY(-2px)}
+        .nav-links a.active{color:#FFF;background:#FF6B35;border-color:#000;box-shadow:3px 3px 0 #000}
+
+        /* UFO Menu Button */
+        .ufo-menu-btn{display:none;width:52px;height:55px;cursor:pointer;position:relative;animation:ufoFloat 3s ease-in-out infinite;z-index:1001;flex-direction:column;align-items:center;justify-content:center}
+        .ufo-menu-btn::after{content:'';position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);width:16px;height:28px;background:linear-gradient(180deg,rgba(255,217,15,.5),transparent);clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);animation:beamPulse 1.5s ease-in-out infinite}
+        .ufo-dome{width:22px;height:14px;background:linear-gradient(180deg,#87CEEB,#5CB8E6);border:2.5px solid #000;border-radius:50% 50% 0 0;position:relative;z-index:2}
+        .ufo-saucer{width:44px;height:14px;background:linear-gradient(180deg,#C0C0C0,#A0A0A0);border:2.5px solid #000;border-radius:50%;margin-top:-4px;position:relative;z-index:3}
+        .ufo-lights{display:flex;gap:6px;margin-top:-2px;position:relative;z-index:1}
+        .ufo-light{width:6px;height:6px;border-radius:50%;animation:ufoLights 1.5s ease-in-out infinite}
+        .ufo-light:nth-child(1){background:#FF6B35;animation-delay:0s}
+        .ufo-light:nth-child(2){background:#FFD90F;animation-delay:.3s}
+        .ufo-light:nth-child(3){background:#4ADE80;animation-delay:.6s}
+
+        /* Mobile Menu */
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,44,46,.97);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:1001;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu-overlay a{font-size:36px;color:#FFF;letter-spacing:3px;padding:15px 40px;border-radius:12px;border:3px solid transparent;transition:all .3s ease;transform:translateY(20px);opacity:0}
+        .mobile-menu-overlay.active a{transform:translateY(0);opacity:1}
+        .mobile-menu-overlay.active a:nth-child(2){transition-delay:.1s}
+        .mobile-menu-overlay.active a:nth-child(3){transition-delay:.2s}
+        .mobile-menu-overlay.active a:nth-child(4){transition-delay:.3s}
+        .mobile-menu-overlay.active a:nth-child(5){transition-delay:.4s}
+        .mobile-menu-overlay a:hover{color:#FF6B35;border-color:#FF6B35}
+
+        .mobile-menu-close.ufo-close{width:50px;height:45px;position:absolute;top:25px;right:25px;cursor:pointer;animation:ufoFloat 2s ease-in-out infinite}
+        .close-ufo-dome{width:22px;height:12px;background:linear-gradient(180deg,#F0F0F0,#D0D0D0);border:2px solid #000;border-radius:20px 20px 0 0;border-bottom:none;position:absolute;top:5px;left:50%;transform:translateX(-50%)}
+        .close-ufo-saucer{width:40px;height:12px;background:linear-gradient(180deg,#D8D8D8,#A8A8A8);border:2px solid #000;border-radius:50%;position:absolute;top:14px;left:50%;transform:translateX(-50%)}
+        .close-ufo-lights{display:flex;gap:5px;position:absolute;top:28px;left:50%;transform:translateX(-50%)}
+        .close-ufo-light{width:4px;height:4px;border-radius:50%;animation:ufoLights 1.2s ease-in-out infinite}
+        .close-ufo-light:nth-child(1){background:#FF6B35}
+        .close-ufo-light:nth-child(2){background:#FFD90F}
+        .close-ufo-light:nth-child(3){background:#4ADE80}
+
+        /* ========== KEYFRAMES ========== */
+        @keyframes logoPop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.03) rotate(-2deg)}}
+        @keyframes ufoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes beamPulse{0%,100%{opacity:.3}50%{opacity:.8}}
+        @keyframes ufoLights{0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 6px currentColor}50%{opacity:.3;transform:scale(.6);box-shadow:0 0 2px currentColor}}
+        @keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes floatIcon{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-15px) rotate(5deg)}}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+        /* ========== HERO SECTION ========== */
+        .hero-section{background:linear-gradient(180deg,#FFF8F0,#FFE8D6);padding:60px 20px;text-align:center;position:relative;overflow:hidden;border-bottom:4px solid #000}
+        .hero-heading{font-size:52px;color:#FF6B35;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;margin-bottom:10px;letter-spacing:3px}
+        .hero-subtext{font-size:20px;color:#3D2C2E;letter-spacing:1.5px;opacity:.85;margin-bottom:25px}
+
+        /* Floating Icons */
+        .floating-icons{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;overflow:hidden}
+        .floating-icon{position:absolute;font-size:40px;opacity:.15;animation:floatIcon 4s ease-in-out infinite}
+        .floating-icon:nth-child(1){top:15%;left:8%;animation-delay:0s}
+        .floating-icon:nth-child(2){top:20%;right:10%;animation-delay:1s}
+        .floating-icon:nth-child(3){top:60%;left:5%;animation-delay:2s}
+        .floating-icon:nth-child(4){top:70%;right:8%;animation-delay:1.5s}
+        .floating-icon:nth-child(5){top:40%;left:12%;animation-delay:0.5s}
+        .floating-icon:nth-child(6){top:50%;right:15%;animation-delay:2.5s}
+
+        /* Currency Toggle */
+        .currency-toggle-container{display:flex;justify-content:center;margin-top:10px}
+        .currency-toggle{background:#3D2C2E;border:4px solid #000;border-radius:12px;padding:5px;display:inline-flex;box-shadow:4px 4px 0 #000}
+        .currency-btn{padding:10px 25px;font-size:20px;border-radius:8px;border:none;transition:all .3s;color:#FFF8F0;letter-spacing:1px;font-family:'Bangers',cursive}
+        .currency-btn.active{background:#FF6B35;color:#FFF;box-shadow:inset 0 0 10px rgba(0,0,0,.2)}
+        .currency-btn:not(.active){background:transparent}
+        .currency-btn:not(.active):hover{background:rgba(255,107,53,.2)}
+
+        /* ========== MAIN LAYOUT ========== */
+        .main-container{display:grid;grid-template-columns:1fr 380px;gap:30px;max-width:1200px;margin:0 auto;padding:40px 20px}
+
+        /* ========== FORM SECTION ========== */
+        .form-section{display:flex;flex-direction:column;gap:25px}
+
+        .form-card{background:#FFF;border:4px solid #000;border-radius:20px;padding:30px;box-shadow:6px 6px 0 #000;opacity:0;transform:translateY(30px);transition:all .5s ease}
+        .form-card.revealed{opacity:1;transform:translateY(0)}
+
+        .form-card-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:15px;border-bottom:3px dashed rgba(0,0,0,.1)}
+        .form-card-icon{font-size:32px;animation:iconBounce 3s ease-in-out infinite}
+        .form-card-title{font-size:26px;color:#FF6B35;letter-spacing:2px;text-shadow:1px 1px 0 #000}
+
+        /* Input Styles */
+        .form-group{margin-bottom:18px}
+        .form-label{display:block;font-size:18px;color:#3D2C2E;margin-bottom:8px;letter-spacing:1px}
+        .form-input,.form-select,.form-textarea{width:100%;padding:14px 18px;font-size:18px;font-family:'Bangers',cursive;letter-spacing:1px;border:4px solid #000;border-radius:12px;background:#FFF8F0;color:#3D2C2E;transition:all .3s}
+        .form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:#FF6B35;box-shadow:0 0 0 4px rgba(255,107,53,.2)}
+        .form-input::placeholder{color:rgba(61,44,46,.4)}
+        .form-textarea{resize:vertical;min-height:120px}
+        .form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233D2C2E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center;padding-right:50px}
+
+        .required{color:#FF6B35}
+        .helper-text{font-size:14px;color:rgba(61,44,46,.6);margin-top:5px;letter-spacing:.5px}
+
+        /* Design Style Cards */
+        .design-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+        .design-card{background:#FFF8F0;border:4px solid #000;border-radius:12px;padding:18px 10px;text-align:center;cursor:pointer;transition:all .3s}
+        .design-card:hover{transform:translateY(-5px);box-shadow:4px 8px 0 #000}
+        .design-card.selected{border-color:#FF6B35;background:#FF6B35;box-shadow:4px 4px 0 #000}
+        .design-card.selected .design-card-icon,.design-card.selected .design-card-label{color:#FFF}
+        .design-card-icon{font-size:32px;display:block;margin-bottom:8px}
+        .design-card-label{font-size:14px;color:#3D2C2E;letter-spacing:.5px}
+
+        /* Number Inputs Row */
+        .number-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .number-input-wrapper{position:relative}
+        .number-input{width:100%;padding:14px 18px;font-size:20px;font-family:'Bangers',cursive;border:4px solid #000;border-radius:12px;background:#FFF8F0;text-align:center}
+        .number-input:focus{outline:none;border-color:#FF6B35}
+        .price-addon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:14px;color:#4ADE80;letter-spacing:.5px;pointer-events:none}
+
+        /* Toggle Switches */
+        .toggle-list{display:flex;flex-direction:column;gap:15px}
+        .toggle-item{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;background:#FFF8F0;border:3px solid #000;border-radius:10px;transition:all .3s}
+        .toggle-item:hover{background:#FFE8D6}
+        .toggle-item.active{border-color:#FF6B35}
+        .toggle-info{display:flex;align-items:center;gap:12px}
+        .toggle-icon{font-size:24px}
+        .toggle-label{font-size:18px;color:#3D2C2E;letter-spacing:1px}
+        .toggle-price{font-size:14px;color:#4ADE80;margin-left:8px}
+        .toggle-switch{width:60px;height:32px;background:#ccc;border:3px solid #000;border-radius:20px;position:relative;cursor:pointer;transition:all .3s}
+        .toggle-switch::after{content:'';position:absolute;width:22px;height:22px;background:#FFF;border:2px solid #000;border-radius:50%;top:2px;left:3px;transition:all .3s}
+        .toggle-switch.active{background:#FF6B35}
+        .toggle-switch.active::after{left:31px}
+
+        /* Radio Cards */
+        .radio-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+        .radio-card{background:#FFF8F0;border:4px solid #000;border-radius:12px;padding:20px 15px;text-align:center;cursor:pointer;transition:all .3s}
+        .radio-card:hover{transform:translateY(-5px);box-shadow:4px 8px 0 #000}
+        .radio-card.selected{border-color:#FF6B35;background:linear-gradient(135deg,#FF6B35,#FFD90F);box-shadow:4px 4px 0 #000}
+        .radio-card.selected .radio-card-label,.radio-card.selected .radio-card-price{color:#FFF;text-shadow:1px 1px 0 #000}
+        .radio-card-icon{font-size:36px;display:block;margin-bottom:10px}
+        .radio-card-label{font-size:18px;color:#3D2C2E;letter-spacing:1px;margin-bottom:5px}
+        .radio-card-price{font-size:22px;color:#FF6B35;letter-spacing:1px}
+
+        /* Quality Cards */
+        .quality-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+        .quality-card{background:#FFF8F0;border:4px solid #000;border-radius:15px;padding:25px 15px;text-align:center;cursor:pointer;transition:all .3s;position:relative}
+        .quality-card:hover{transform:translateY(-8px);box-shadow:5px 12px 0 #000}
+        .quality-card.selected{border-color:#FF6B35;background:linear-gradient(135deg,#FF6B35,#FFD90F)}
+        .quality-card.selected .quality-icon,.quality-card.selected .quality-label,.quality-card.selected .quality-price{color:#FFF;text-shadow:1px 1px 0 #000}
+        .quality-card.popular::before{content:'POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#FFD90F;color:#3D2C2E;font-size:12px;padding:4px 12px;border:2px solid #000;border-radius:10px;letter-spacing:1px}
+        .quality-icon{font-size:42px;display:block;margin-bottom:10px}
+        .quality-label{font-size:22px;color:#3D2C2E;letter-spacing:1px;margin-bottom:8px}
+        .quality-price{font-size:28px;color:#FF6B35;letter-spacing:1px}
+        .quality-desc{font-size:13px;color:rgba(61,44,46,.7);margin-top:8px;letter-spacing:.5px}
+
+        /* Submit Button */
+        .submit-btn{width:100%;padding:18px;font-size:24px;font-family:'Bangers',cursive;letter-spacing:2px;background:#FF6B35;color:#FFF;border:4px solid #000;border-radius:15px;box-shadow:5px 5px 0 #000;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:12px}
+        .submit-btn:hover{transform:translateY(-3px);box-shadow:5px 8px 0 #000;background:#e55a2b}
+        .submit-btn:active{transform:translateY(0);box-shadow:3px 3px 0 #000}
+
+        /* ========== PRICE SUMMARY SIDEBAR ========== */
+        .price-sidebar{position:sticky;top:90px;height:fit-content}
+
+        .price-card{background:#3D2C2E;border:4px solid #000;border-radius:20px;padding:25px;box-shadow:6px 6px 0 #000;color:#FFF8F0}
+
+        .price-card-header{text-align:center;padding-bottom:20px;border-bottom:3px dashed rgba(255,255,255,.2);margin-bottom:20px}
+        .price-card-title{font-size:28px;color:#FFD90F;letter-spacing:2px;text-shadow:2px 2px 0 #000}
+        .price-card-subtitle{font-size:14px;color:rgba(255,255,255,.6);margin-top:5px}
+
+        .price-breakdown{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+        .price-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,.05);border-radius:8px;font-size:16px;letter-spacing:.5px}
+        .price-item.base{background:rgba(255,107,53,.2)}
+        .price-item .item-label{color:#FFF8F0}
+        .price-item .item-value{color:#4ADE80}
+        .price-item .item-value.zero{color:rgba(255,255,255,.3)}
+        .price-item.addon .item-value{color:#FFD90F}
+
+        .price-divider{height:3px;background:linear-gradient(90deg,transparent,#FF6B35,transparent);margin:15px 0}
+
+        .price-total{display:flex;justify-content:space-between;align-items:center;padding:15px;background:linear-gradient(135deg,#FF6B35,#FFD90F);border:3px solid #000;border-radius:12px}
+        .total-label{font-size:24px;color:#FFF;text-shadow:1px 1px 0 #000;letter-spacing:1px}
+        .total-value{font-size:32px;color:#FFF;text-shadow:2px 2px 0 #000;letter-spacing:1px;animation:pulse 2s ease-in-out infinite}
+
+        .price-note{text-align:center;font-size:13px;color:rgba(255,255,255,.5);margin-top:15px;letter-spacing:.5px}
+
+        /* ========== SUCCESS OVERLAY ========== */
+        .success-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,44,46,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2000;opacity:0;visibility:hidden;transition:all .4s}
+        .success-overlay.active{opacity:1;visibility:visible}
+        .success-icon{font-size:100px;margin-bottom:20px;animation:iconBounce 1s ease-in-out infinite}
+        .success-title{font-size:48px;color:#4ADE80;text-shadow:3px 3px 0 #000;margin-bottom:15px;letter-spacing:3px}
+        .success-text{font-size:22px;color:#FFF8F0;text-align:center;max-width:500px;line-height:1.5;margin-bottom:30px}
+        .success-btn{padding:15px 40px;font-size:22px;font-family:'Bangers',cursive;background:#FF6B35;color:#FFF;border:4px solid #000;border-radius:12px;box-shadow:4px 4px 0 #000;cursor:pointer;transition:all .3s;letter-spacing:1px}
+        .success-btn:hover{transform:translateY(-3px);box-shadow:4px 7px 0 #000}
+
+        /* ========== FOOTER ========== */
+        .footer{background:#3D2C2E;color:#FFF8F0;padding:50px 20px 25px;border-top:4px solid #000;margin-top:60px}
+        .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1100px;margin:0 auto}
+        .footer-col h3{font-size:24px;color:#FFD90F;letter-spacing:2px;margin-bottom:15px}
+        .footer-col p{font-size:16px;color:rgba(255,248,240,.8);letter-spacing:.8px;line-height:1.8}
+        .footer-logo{font-size:28px;color:#FF6B35;letter-spacing:2px;text-shadow:2px 2px 0 #000;display:inline-block;margin-bottom:10px}
+        .footer-links{display:flex;flex-direction:column;gap:5px}
+        .footer-links a{font-size:16px;color:rgba(255,248,240,.8);padding:3px 0;transition:color .3s}
+        .footer-links a:hover{color:#FF6B35}
+        .footer-bottom{text-align:center;margin-top:35px;padding-top:20px;border-top:2px solid rgba(255,255,255,.15)}
+        .footer-bottom p{font-size:15px;color:rgba(255,255,255,.5);letter-spacing:1px}
+
+        /* ========== RESPONSIVE ========== */
+        @media(max-width:1024px){
+            .main-container{grid-template-columns:1fr;max-width:700px}
+            .price-sidebar{position:relative;top:0;order:-1}
+            .design-cards{grid-template-columns:repeat(2,1fr)}
+        }
+
+        @media(max-width:768px){
+            .nav-links{display:none}
+            .ufo-menu-btn{display:flex}
+            .navbar{padding:0 20px}
+            .hero-heading{font-size:38px}
+            .hero-subtext{font-size:18px}
+            .form-card{padding:20px}
+            .design-cards{grid-template-columns:repeat(2,1fr)}
+            .quality-cards{grid-template-columns:1fr}
+            .radio-cards{grid-template-columns:1fr}
+            .number-row{grid-template-columns:1fr}
+            .footer-grid{grid-template-columns:1fr;text-align:center}
+            .footer-links{align-items:center}
+            .total-value{font-size:26px}
+        }
+
+        @media(max-width:480px){
+            .nav-logo{font-size:26px}
+            .hero-heading{font-size:30px}
+            .form-card-title{font-size:22px}
+            .currency-btn{padding:8px 18px;font-size:18px}
+            .design-cards{grid-template-columns:1fr 1fr}
+            .design-card{padding:12px 8px}
+            .design-card-icon{font-size:26px}
+            .design-card-label{font-size:12px}
+            .mobile-menu-overlay a{font-size:28px;padding:12px 30px}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">WEB-BOON</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="packages.html">Packages</a>
+            <a href="contact.html" class="active">Contact</a>
+        </div>
+        <button class="ufo-menu-btn" id="ufoMenuBtn">
+            <div class="ufo-dome"></div>
+            <div class="ufo-saucer"></div>
+            <div class="ufo-lights">
+                <div class="ufo-light"></div>
+                <div class="ufo-light"></div>
+                <div class="ufo-light"></div>
+            </div>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <button class="mobile-menu-close ufo-close" id="closeMenuBtn">
+            <div class="close-ufo-dome"></div>
+            <div class="close-ufo-saucer"></div>
+            <div class="close-ufo-lights">
+                <div class="close-ufo-light"></div>
+                <div class="close-ufo-light"></div>
+                <div class="close-ufo-light"></div>
+            </div>
+        </button>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="packages.html">Packages</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="floating-icons">
+            <span class="floating-icon">🔧</span>
+            <span class="floating-icon">⚙️</span>
+            <span class="floating-icon">🎨</span>
+            <span class="floating-icon">✨</span>
+            <span class="floating-icon">💻</span>
+            <span class="floating-icon">🚀</span>
+        </div>
+        <h1 class="hero-heading">🎨 Customize Your Website</h1>
+        <p class="hero-subtext">Tell us exactly what you need & get instant price estimate!</p>
+        
+        <div class="currency-toggle-container">
+            <div class="currency-toggle">
+                <button class="currency-btn active" data-currency="inr" onclick="setCurrency('inr')">₹ INR</button>
+                <button class="currency-btn" data-currency="usd" onclick="setCurrency('usd')">$ USD</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+
+        <!-- FORM SECTION -->
+        <div class="form-section">
+
+            <!-- YOUR INFORMATION -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">📝</span>
+                    <h2 class="form-card-title">Your Information</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Your Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="userName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address <span class="required">*</span></label>
+                    <input type="email" class="form-input" id="userEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" id="userPhone" placeholder="+91 98765 43210">
+                </div>
+            </div>
+
+            <!-- WEBSITE TYPE -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">🌐</span>
+                    <h2 class="form-card-title">Website Type</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">What type of website do you need? <span class="required">*</span></label>
+                    <select class="form-select" id="websiteType">
+                        <option value="">-- Select Website Type --</option>
+                        <option value="restaurant">🍕 Restaurant / Food Business</option>
+                        <option value="ecommerce">🛒 E-commerce / Online Store</option>
+                        <option value="portfolio">👨‍💼 Personal Portfolio</option>
+                        <option value="business">💼 Business / Corporate</option>
+                        <option value="blog">📝 Blog / Magazine</option>
+                        <option value="landing">🎯 Landing Page</option>
+                        <option value="education">🏫 School / Education</option>
+                        <option value="healthcare">🏥 Healthcare / Clinic</option>
+                        <option value="realestate">🏠 Real Estate</option>
+                        <option value="travel">✈️ Travel / Tourism</option>
+                        <option value="gym">💪 Gym / Fitness</option>
+                        <option value="ngo">🤝 NGO / Non-profit</option>
+                        <option value="other">📦 Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DESIGN STYLE -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">🎨</span>
+                    <h2 class="form-card-title">Design Style</h2>
+                </div>
+                <label class="form-label">Choose your preferred design style:</label>
+                <div class="design-cards">
+                    <div class="design-card" data-style="minimalist" onclick="selectDesign(this)">
+                        <span class="design-card-icon">🎯</span>
+                        <span class="design-card-label">Minimalist</span>
+                    </div>
+                    <div class="design-card" data-style="creative" onclick="selectDesign(this)">
+                        <span class="design-card-icon">🎪</span>
+                        <span class="design-card-label">Creative</span>
+                    </div>
+                    <div class="design-card" data-style="corporate" onclick="selectDesign(this)">
+                        <span class="design-card-icon">💼</span>
+                        <span class="design-card-label">Corporate</span>
+                    </div>
+                    <div class="design-card" data-style="colorful" onclick="selectDesign(this)">
+                        <span class="design-card-icon">🌈</span>
+                        <span class="design-card-label">Colorful</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGES & STRUCTURE -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">📄</span>
+                    <h2 class="form-card-title">Pages & Structure</h2>
+                </div>
+                <p class="helper-text" style="margin-bottom:15px">Base package includes 3 pages. Extra pages have additional cost.</p>
+                <div class="number-row">
+                    <div class="form-group">
+                        <label class="form-label">Main Pages</label>
+                        <div class="number-input-wrapper">
+                            <input type="number" class="number-input" id="mainPages" value="3" min="1" max="50" onchange="calculatePrice()">
+                            <span class="price-addon" id="mainPagesPrice"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sub-pages</label>
+                        <div class="number-input-wrapper">
+                            <input type="number" class="number-input" id="subPages" value="0" min="0" max="100" onchange="calculatePrice()">
+                            <span class="price-addon" id="subPagesPrice"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURES -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">✨</span>
+                    <h2 class="form-card-title">Features You Need</h2>
+                </div>
+                <div class="toggle-list">
+                    <div class="toggle-item" onclick="toggleFeature(this)" data-feature="animations" data-price-inr="500" data-price-usd="6">
+                        <div class="toggle-info">
+                            <span class="toggle-icon">🎬</span>
+                            <span class="toggle-label">Animations</span>
+                            <span class="toggle-price">+₹500</span>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" onclick="toggleFeature(this)" data-feature="contactForm" data-price-inr="300" data-price-usd="4">
+                        <div class="toggle-info">
+                            <span class="toggle-icon">📧</span>
+                            <span class="toggle-label">Contact Form</span>
+                            <span class="toggle-price">+₹300</span>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" onclick="toggleFeature(this)" data-feature="ecommerce" data-price-inr="3000" data-price-usd="36">
+                        <div class="toggle-info">
+                            <span class="toggle-icon">🛒</span>
+                            <span class="toggle-label">E-commerce</span>
+                            <span class="toggle-price">+₹3,000</span>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" onclick="toggleFeature(this)" data-feature="blog" data-price-inr="800" data-price-usd="10">
+                        <div class="toggle-info">
+                            <span class="toggle-icon">📝</span>
+                            <span class="toggle-label">Blog Section</span>
+                            <span class="toggle-price">+₹800</span>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" onclick="toggleFeature(this)" data-feature="userLogin" data-price-inr="1500" data-price-usd="18">
+                        <div class="toggle-info">
+                            <span class="toggle-icon">🔐</span>
+                            <span class="toggle-label">User Login System</span>
+                            <span class="toggle-price">+₹1,500</span>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-item" onclick="toggleFeature(this)" data-feature="seo" data-price-inr="1000" data-price-usd="12">
+                        <div class="toggle-info">
+                            <span class="toggle-icon">🔍</span>
+                            <span class="toggle-label">SEO Optimization</span>
+                            <span class="toggle-price">+₹1,000</span>
+                        </div>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DEVELOPMENT SCOPE -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">💻</span>
+                    <h2 class="form-card-title">Development Scope</h2>
+                </div>
+                <div class="radio-cards">
+                    <div class="radio-card selected" data-scope="frontend" data-price-inr="0" data-price-usd="0" onclick="selectScope(this)">
+                        <span class="radio-card-icon">🎨</span>
+                        <span class="radio-card-label">Frontend Only</span>
+                        <span class="radio-card-price">Base Price</span>
+                    </div>
+                    <div class="radio-card" data-scope="backend" data-price-inr="2000" data-price-usd="24" onclick="selectScope(this)">
+                        <span class="radio-card-icon">⚙️</span>
+                        <span class="radio-card-label">Backend Only</span>
+                        <span class="radio-card-price">+₹2,000</span>
+                    </div>
+                    <div class="radio-card" data-scope="fullstack" data-price-inr="3500" data-price-usd="42" onclick="selectScope(this)">
+                        <span class="radio-card-icon">🚀</span>
+                        <span class="radio-card-label">Full Stack</span>
+                        <span class="radio-card-price">+₹3,500</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUALITY LEVEL -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">💎</span>
+                    <h2 class="form-card-title">Quality Level</h2>
+                </div>
+                <div class="quality-cards">
+                    <div class="quality-card" data-quality="basic" data-price-inr="2000" data-price-usd="24" onclick="selectQuality(this)">
+                        <span class="quality-icon">⭐</span>
+                        <span class="quality-label">Basic</span>
+                        <span class="quality-price">₹2,000</span>
+                        <span class="quality-desc">Simple & functional</span>
+                    </div>
+                    <div class="quality-card popular selected" data-quality="premium" data-price-inr="5000" data-price-usd="60" onclick="selectQuality(this)">
+                        <span class="quality-icon">🌟</span>
+                        <span class="quality-label">Premium</span>
+                        <span class="quality-price">₹5,000</span>
+                        <span class="quality-desc">Professional look</span>
+                    </div>
+                    <div class="quality-card" data-quality="vip" data-price-inr="10000" data-price-usd="120" onclick="selectQuality(this)">
+                        <span class="quality-icon">👑</span>
+                        <span class="quality-label">VIP</span>
+                        <span class="quality-price">₹10,000</span>
+                        <span class="quality-desc">Top-tier quality</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL REQUIREMENTS -->
+            <div class="form-card reveal">
+                <div class="form-card-header">
+                    <span class="form-card-icon">💬</span>
+                    <h2 class="form-card-title">Additional Requirements</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tell us anything else we should know:</label>
+                    <textarea class="form-textarea" id="additionalNotes" placeholder="Describe any special features, reference websites, color preferences, deadline, etc..."></textarea>
+                </div>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button class="submit-btn" onclick="submitForm()">
+                <span>🚀</span>
+                <span>Submit My Requirements</span>
+            </button>
+
+        </div>
+
+        <!-- PRICE SIDEBAR -->
+        <div class="price-sidebar">
+            <div class="price-card">
+                <div class="price-card-header">
+                    <h3 class="price-card-title">💰 Price Estimate</h3>
+                    <p class="price-card-subtitle">Live calculation</p>
+                </div>
+
+                <div class="price-breakdown">
+                    <div class="price-item base">
+                        <span class="item-label">Base Price (Quality)</span>
+                        <span class="item-value" id="priceBase">₹5,000</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="item-label">Extra Pages</span>
+                        <span class="item-value" id="pricePages">₹0</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="item-label">Sub-pages</span>
+                        <span class="item-value" id="priceSubpages">₹0</span>
+                    </div>
+                    <div class="price-item addon">
+                        <span class="item-label">Features</span>
+                        <span class="item-value" id="priceFeatures">₹0</span>
+                    </div>
+                    <div class="price-item addon">
+                        <span class="item-label">Dev Scope</span>
+                        <span class="item-value" id="priceScope">₹0</span>
+                    </div>
+                </div>
+
+                <div class="price-divider"></div>
+
+                <div class="price-total">
+                    <span class="total-label">TOTAL</span>
+                    <span class="total-value" id="priceTotal">₹5,000</span>
+                </div>
+
+                <p class="price-note">* Final price may vary based on requirements</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+        <span class="success-icon">🎉</span>
+        <h2 class="success-title">Request Sent!</h2>
+        <p class="success-text">Thank you! We've received your requirements. We'll contact you within 24 hours with a detailed quote.</p>
+        <button class="success-btn" onclick="closeSuccess()">Got It!</button>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-logo">WEB-BOON</span>
+                <p>We create affordable, professional websites for businesses, startups, and individuals.</p>
+                <p style="margin-top:8px">📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Services</a>
+                    <a href="packages.html">Packages</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p>📧 heisenberg.webboon@gmail.com</p>
+                <p>📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 WEB-BOON | Designed by Heisenberg</p>
+        </div>
+    </footer>
+
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <script>
+        // ========== AUDIO ========== //
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        document.addEventListener('click', initAudio, { once: true });
+
+        function playClickSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+
+        function playSuccessSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [523, 659, 784, 1047];
+                notes.forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.12);
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.12 + 0.3);
+                    osc.start(audioCtx.currentTime + i * 0.12);
+                    osc.stop(audioCtx.currentTime + i * 0.12 + 0.3);
+                });
+            } catch (e) {}
+        }
+
+        // ========== MOBILE MENU ========== //
+        function toggleMobileMenu() {
+            playClickSound();
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            playClickSound();
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('ufoMenuBtn').addEventListener('click', toggleMobileMenu);
+        document.getElementById('closeMenuBtn').addEventListener('click', closeMobileMenu);
+
+        document.querySelectorAll('.mobile-menu-overlay a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) closeMobileMenu();
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        // ========== PRICING DATA ========== //
+        let currentCurrency = 'inr';
+
+        const prices = {
+            quality: {
+                basic: { inr: 2000, usd: 24 },
+                premium: { inr: 5000, usd: 60 },
+                vip: { inr: 10000, usd: 120 }
+            },
+            extraPage: { inr: 200, usd: 2.5 },
+            subPage: { inr: 100, usd: 1.25 },
+            includedPages: 3
+        };
+
+        let selectedData = {
+            quality: 'premium',
+            designStyle: '',
+            scope: 'frontend',
+            features: {
+                animations: false,
+                contactForm: false,
+                ecommerce: false,
+                blog: false,
+                userLogin: false,
+                seo: false
+            }
+        };
+
+        // ========== CURRENCY TOGGLE ========== //
+        function setCurrency(currency) {
+            playClickSound();
+            currentCurrency = currency;
+
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.currency === currency);
+            });
+
+            updateAllPriceDisplays();
+            calculatePrice();
+        }
+
+        function formatPrice(amount) {
+            if (currentCurrency === 'inr') {
+                return '₹' + amount.toLocaleString('en-IN');
+            } else {
+                return '$' + amount.toLocaleString('en-US');
+            }
+        }
+
+        function updateAllPriceDisplays() {
+            // Update toggle prices
+            document.querySelectorAll('.toggle-item').forEach(item => {
+                const priceSpan = item.querySelector('.toggle-price');
+                const priceINR = parseInt(item.dataset.priceInr);
+                const priceUSD = parseFloat(item.dataset.priceUsd);
+                const price = currentCurrency === 'inr' ? priceINR : priceUSD;
+                priceSpan.textContent = '+' + formatPrice(price);
+            });
+
+            // Update scope card prices
+            document.querySelectorAll('.radio-card').forEach(card => {
+                const priceSpan = card.querySelector('.radio-card-price');
+                const priceINR = parseInt(card.dataset.priceInr);
+                const priceUSD = parseFloat(card.dataset.priceUsd);
+                if (priceINR === 0) {
+                    priceSpan.textContent = 'Base Price';
+                } else {
+                    const price = currentCurrency === 'inr' ? priceINR : priceUSD;
+                    priceSpan.textContent = '+' + formatPrice(price);
+                }
+            });
+
+            // Update quality card prices
+            document.querySelectorAll('.quality-card').forEach(card => {
+                const priceSpan = card.querySelector('.quality-price');
+                const priceINR = parseInt(card.dataset.priceInr);
+                const priceUSD = parseFloat(card.dataset.priceUsd);
+                const price = currentCurrency === 'inr' ? priceINR : priceUSD;
+                priceSpan.textContent = formatPrice(price);
+            });
+        }
+
+        // ========== SELECTION FUNCTIONS ========== //
+        function selectDesign(el) {
+            playClickSound();
+            document.querySelectorAll('.design-card').forEach(card => card.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedData.designStyle = el.dataset.style;
+        }
+
+        function selectScope(el) {
+            playClickSound();
+            document.querySelectorAll('.radio-card').forEach(card => card.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedData.scope = el.dataset.scope;
+            calculatePrice();
+        }
+
+        function selectQuality(el) {
+            playClickSound();
+            document.querySelectorAll('.quality-card').forEach(card => card.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedData.quality = el.dataset.quality;
+            calculatePrice();
+        }
+
+        function toggleFeature(el) {
+            playClickSound();
+            const toggle = el.querySelector('.toggle-switch');
+            const isActive = toggle.classList.toggle('active');
+            el.classList.toggle('active', isActive);
+            
+            const feature = el.dataset.feature;
+            selectedData.features[feature] = isActive;
+            calculatePrice();
+        }
+
+        // ========== PRICE CALCULATION ========== //
+        function calculatePrice() {
+            const mainPages = parseInt(document.getElementById('mainPages').value) || 3;
+            const subPages = parseInt(document.getElementById('subPages').value) || 0;
+
+            // Base price
+            const basePrice = prices.quality[selectedData.quality][currentCurrency];
+
+            // Extra pages (beyond included 3)
+            const extraPages = Math.max(0, mainPages - prices.includedPages);
+            const pagesPrice = extraPages * prices.extraPage[currentCurrency];
+
+            // Sub-pages
+            const subPagesPrice = subPages * prices.subPage[currentCurrency];
+
+            // Features
+            let featuresPrice = 0;
+            document.querySelectorAll('.toggle-item').forEach(item => {
+                const toggle = item.querySelector('.toggle-switch');
+                if (toggle.classList.contains('active')) {
+                    const price = currentCurrency === 'inr' 
+                        ? parseInt(item.dataset.priceInr) 
+                        : parseFloat(item.dataset.priceUsd);
+                    featuresPrice += price;
+                }
+            });
+
+            // Scope
+            let scopePrice = 0;
+            const selectedScope = document.querySelector('.radio-card.selected');
+            if (selectedScope) {
+                scopePrice = currentCurrency === 'inr'
+                    ? parseInt(selectedScope.dataset.priceInr)
+                    : parseFloat(selectedScope.dataset.priceUsd);
+            }
+
+            // Total
+            const total = basePrice + pagesPrice + subPagesPrice + featuresPrice + scopePrice;
+
+            // Update display
+            document.getElementById('priceBase').textContent = formatPrice(basePrice);
+            document.getElementById('pricePages').textContent = pagesPrice > 0 ? formatPrice(pagesPrice) : formatPrice(0);
+            document.getElementById('pricePages').classList.toggle('zero', pagesPrice === 0);
+            document.getElementById('priceSubpages').textContent = subPagesPrice > 0 ? formatPrice(subPagesPrice) : formatPrice(0);
+            document.getElementById('priceSubpages').classList.toggle('zero', subPagesPrice === 0);
+            document.getElementById('priceFeatures').textContent = featuresPrice > 0 ? formatPrice(featuresPrice) : formatPrice(0);
+            document.getElementById('priceFeatures').classList.toggle('zero', featuresPrice === 0);
+            document.getElementById('priceScope').textContent = scopePrice > 0 ? formatPrice(scopePrice) : formatPrice(0);
+            document.getElementById('priceScope').classList.toggle('zero', scopePrice === 0);
+            document.getElementById('priceTotal').textContent = formatPrice(total);
+
+            // Update addon displays
+            if (extraPages > 0) {
+                document.getElementById('mainPagesPrice').textContent = '+' + formatPrice(pagesPrice);
+            } else {
+                document.getElementById('mainPagesPrice').textContent = '';
+            }
+            if (subPages > 0) {
+                document.getElementById('subPagesPrice').textContent = '+' + formatPrice(subPagesPrice);
+            } else {
+                document.getElementById('subPagesPrice').textContent = '';
+            }
+        }
+
+        // ========== FORM SUBMISSION ========== //
+        function submitForm() {
+            playClickSound();
+
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
+            const websiteType = document.getElementById('websiteType').value;
+            const mainPages = document.getElementById('mainPages').value;
+            const subPages = document.getElementById('subPages').value;
+            const notes = document.getElementById('additionalNotes').value.trim();
+
+            // Validation
+            if (!name) {
+                alert('Please enter your name!');
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email!');
+                return;
+            }
+            if (!websiteType) {
+                alert('Please select a website type!');
+                return;
+            }
+
+            // Collect features
+            const features = [];
+            document.querySelectorAll('.toggle-item').forEach(item => {
+                if (item.querySelector('.toggle-switch').classList.contains('active')) {
+                    features.push(item.querySelector('.toggle-label').textContent);
+                }
+            });
+
+            // Get selected design
+            const designCard = document.querySelector('.design-card.selected');
+            const designStyle = designCard ? designCard.querySelector('.design-card-label').textContent : 'Not selected';
+
+            // Get selected scope
+            const scopeCard = document.querySelector('.radio-card.selected');
+            const scope = scopeCard ? scopeCard.querySelector('.radio-card-label').textContent : 'Frontend Only';
+
+            // Get selected quality
+            const qualityCard = document.querySelector('.quality-card.selected');
+            const quality = qualityCard ? qualityCard.querySelector('.quality-label').textContent : 'Premium';
+
+            // Get total price
+            const totalPrice = document.getElementById('priceTotal').textContent;
+
+            // Build message
+            const message = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 NEW CUSTOM WEBSITE REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 CLIENT INFORMATION
+━━━━━━━━━━━━━━━━━━━━━
+Name: ${name}
+Email: ${email}
+Phone: ${phone || 'Not provided'}
+
+🌐 PROJECT DETAILS
+━━━━━━━━━━━━━━━━━━━━━
+Website Type: ${websiteType}
+Design Style: ${designStyle}
+Main Pages: ${mainPages}
+Sub-pages: ${subPages}
+
+✨ FEATURES REQUESTED
+━━━━━━━━━━━━━━━━━━━━━
+${features.length > 0 ? features.map(f => '✅ ' + f).join('\n') : '❌ No extra features'}
+
+💻 DEVELOPMENT SCOPE
+━━━━━━━━━━━━━━━━━━━━━
+${scope}
+
+💎 QUALITY LEVEL
+━━━━━━━━━━━━━━━━━━━━━
+${quality}
+
+💰 ESTIMATED PRICE
+━━━━━━━━━━━━━━━━━━━━━
+${totalPrice}
+
+💬 ADDITIONAL NOTES
+━━━━━━━━━━━━━━━━━━━━━
+${notes || 'None'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            `.trim();
+
+            // EmailJS - Replace with your IDs
+            emailjs.init("rceNlGB6t-9CKEBbe"); // Replace with your EmailJS public key
+
+            emailjs.send("service_1fnr04y", "template_mnnsf1l", {
+                from_name: name,
+                from_email: email,
+                message: message,
+                to_email: "heisenberg.webboon@gmail.com"
+            }).then(function() {
+                playSuccessSound();
+                document.getElementById('successOverlay').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }).catch(function(error) {
+                console.error('EmailJS Error:', error);
+                // Still show success for demo (remove in production)
+                playSuccessSound();
+                document.getElementById('successOverlay').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        function closeSuccess() {
+            playClickSound();
+            document.getElementById('successOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+            // Optionally redirect to home
+            // window.location.href = 'index.html';
+        }
+
+        // ========== SCROLL REVEAL ========== //
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal, .form-card');
+            reveals.forEach((el, index) => {
+                const elementTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 80) {
+                    setTimeout(() => {
+                        el.classList.add('revealed');
+                    }, index * 100);
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', () => {
+            revealOnScroll();
+            calculatePrice();
+            updateAllPriceDisplays();
+        });
+
+        // ========== NAVBAR SCROLL ========== //
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.pageYOffset > 50) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,.4)';
+            } else {
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,.3)';
+            }
+        });
+    </script>
+
+</body>
+</html>

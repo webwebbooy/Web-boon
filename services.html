@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services | WEB-BOON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Bangers',cursive;background:#FFF8F0;color:#3D2C2E;overflow-x:hidden}
+        a{text-decoration:none;color:inherit}
+        button{cursor:pointer;border:none;outline:none;background:none;font-family:'Bangers',cursive}
+
+        /* ===== NAVBAR ===== */
+        .navbar{position:sticky;top:0;z-index:1000;background:rgba(61,44,46,.95);backdrop-filter:blur(10px);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;box-shadow:0 2px 10px rgba(0,0,0,.3);border-bottom:4px solid #000}
+        .nav-logo{font-size:36px;color:#FF6B35;letter-spacing:2px;animation:logoPop 2.5s ease-in-out infinite;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;cursor:pointer;display:inline-block}
+        .nav-links{display:flex;align-items:center;gap:8px}
+        .nav-links a{font-size:18px;color:#FFF8F0;padding:8px 18px;border-radius:10px;border:3px solid transparent;transition:all .3s ease}
+        .nav-links a:hover{color:#FF6B35;border-color:#FF6B35;background:rgba(255,107,53,.1)}
+        .nav-links a.active{color:#FFF;background:#FF6B35;border-color:#000;box-shadow:3px 3px 0 #000}
+
+        /* ===== UFO MENU BUTTON ===== */
+        .ufo-menu-btn{display:none;width:52px;height:55px;cursor:pointer;position:relative;background:none;border:none;animation:ufoFloat 3s ease-in-out infinite;box-shadow:0 8px 25px rgba(255,217,15,.5);border-radius:50%;z-index:1001;flex-direction:column;align-items:center;justify-content:center}
+        .ufo-menu-btn::after{content:'';position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);width:16px;height:28px;background:linear-gradient(180deg,rgba(255,217,15,.5),transparent);clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);animation:beamPulse 1.5s ease-in-out infinite}
+        .ufo-dome{width:22px;height:14px;background:linear-gradient(180deg,#87CEEB,#5CB8E6);border:2.5px solid #000;border-radius:50% 50% 0 0;position:relative;z-index:2}
+        .ufo-saucer{width:44px;height:14px;background:linear-gradient(180deg,#C0C0C0,#A0A0A0);border:2.5px solid #000;border-radius:50%;margin-top:-4px;position:relative;z-index:3}
+        .ufo-lights{display:flex;gap:6px;margin-top:-2px}
+        .ufo-light{width:6px;height:6px;border-radius:50%;animation:ufoLights 1.5s ease-in-out infinite}
+        .ufo-light:nth-child(1){background:#FF6B35}
+        .ufo-light:nth-child(2){background:#FFD90F}
+        .ufo-light:nth-child(3){background:#4ADE80}
+
+        /* ===== MOBILE MENU ===== */
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,44,46,.97);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:1001;opacity:0;visibility:hidden;transition:all .4s}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu-close.ufo-close{width:50px;height:45px;background:none;border:none;position:absolute;top:25px;right:25px;cursor:pointer;animation:ufoFloat 2s ease-in-out infinite}
+        .close-ufo-dome{width:22px;height:12px;background:linear-gradient(180deg,#F0F0F0,#D0D0D0);border:2px solid #000;border-radius:20px 20px 0 0;border-bottom:none;position:absolute;top:5px;left:50%;transform:translateX(-50%)}
+        .close-ufo-saucer{width:40px;height:12px;background:linear-gradient(180deg,#D8D8D8,#A8A8A8);border:2px solid #000;border-radius:50%;position:absolute;top:14px;left:50%;transform:translateX(-50%)}
+        .close-ufo-lights{display:flex;gap:5px;position:absolute;top:28px;left:50%;transform:translateX(-50%)}
+        .close-ufo-light{width:4px;height:4px;border-radius:50%;animation:ufoLights 1.2s ease-in-out infinite}
+        .close-ufo-light:nth-child(1){background:#FF6B35}
+        .close-ufo-light:nth-child(2){background:#FFD90F}
+        .close-ufo-light:nth-child(3){background:#4ADE80}
+        .mobile-menu-overlay a{font-size:36px;color:#FFF;padding:15px 40px;border-radius:12px;border:3px solid transparent;transition:all .3s}
+        .mobile-menu-overlay a:hover{color:#FF6B35;border-color:#FF6B35}
+
+        /* ===== KEYFRAMES ===== */
+        @keyframes logoPop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.03) rotate(-2deg)}}
+        @keyframes ufoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes beamPulse{0%,100%{opacity:.3}50%{opacity:.8}}
+        @keyframes ufoLights{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+        @keyframes gentlePop{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+        @keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+        @keyframes alienBlink{0%,90%,100%{transform:scaleY(1)}95%{transform:scaleY(0.1)}}
+        @keyframes alienWave{0%,100%{transform:rotate(0deg)}25%{transform:rotate(15deg)}75%{transform:rotate(-5deg)}}
+        @keyframes bubblePop{0%{transform:translateX(-50%) scale(0);opacity:0}50%{transform:translateX(-50%) scale(1.1)}100%{transform:translateX(-50%) scale(1);opacity:1}}
+        @keyframes alienFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        @keyframes alienShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+        @keyframes alienAngryShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+        @keyframes muzzleFlash{0%,100%{opacity:0;transform:scale(0.5)}50%{opacity:1;transform:scale(1.2)}}
+        @keyframes laserShootCenter{0%{opacity:0;transform:translateY(-50%) scaleX(0)}30%{opacity:1;transform:translateY(-50%) scaleX(1)}100%{opacity:0;transform:translateY(-50%) scaleX(1)}}
+        @keyframes flashEffect{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+
+        /* ===== HERO SECTION ===== */
+        .hero-section{background:linear-gradient(180deg,#FFF8F0,#FFE8D6);padding:60px 20px 80px;text-align:center;position:relative;overflow:hidden;min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+        .hero-content{position:relative;max-width:900px;margin:0 auto;z-index:2;margin-bottom:30px}
+        .hero-heading{font-size:56px;color:#FF6B35;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;animation:gentlePop 4s ease-in-out infinite;margin-bottom:15px}
+        .hero-subtext{font-size:22px;color:#3D2C2E;max-width:600px;margin:0 auto}
+
+        /* ===== ALIEN - HIDDEN BY DEFAULT ===== */
+        .alien-wrapper{position:relative;top:auto;left:auto;transform:none;z-index:10;cursor:pointer;animation:alienFloat 2.5s ease-in-out infinite;margin-top:20px;opacity:0;visibility:hidden;transition:opacity .5s ease, visibility .5s ease}
+        .alien-wrapper.visible{opacity:1;visibility:visible}
+        .alien-body{width:70px;height:85px;background:linear-gradient(180deg,#9D4EDD,#7B2CBF);border:4px solid #000;border-radius:35px 35px 25px 25px;position:relative;box-shadow:4px 4px 0 #000;transition:background .3s ease}
+        .alien-eye-container{display:flex;justify-content:center;gap:12px;margin-top:18px}
+        .alien-eye{width:18px;height:18px;background:#FFF;border:3px solid #000;border-radius:50%;position:relative;animation:alienBlink 4s infinite;transition:transform .3s ease}
+        .alien-eye::before{content:'';position:absolute;width:8px;height:8px;background:#000;border-radius:50%;top:5px;left:5px;transition:top .3s ease}
+        .alien-smile{width:20px;height:10px;border:3px solid #000;border-top:none;border-radius:0 0 25px 25px;margin:8px auto 0;transition:all .3s ease}
+        .alien-antenna{width:4px;height:20px;background:#9D4EDD;border:2px solid #000;border-radius:4px;position:absolute;top:-18px}
+        .alien-antenna::after{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#FFD90F;border:2px solid #000;border-radius:50%;animation:ufoLights 1.5s ease-in-out infinite}
+        .alien-antenna.left-antenna{left:15px;transform:rotate(-15deg)}
+        .alien-antenna.right-antenna{right:15px;transform:rotate(15deg)}
+        .alien-arm-left,.alien-arm-right{width:8px;height:30px;background:linear-gradient(180deg,#9D4EDD,#7B2CBF);border:3px solid #000;border-radius:4px;position:absolute;top:35px;transition:all .3s ease}
+        .alien-arm-left{left:-12px;transform:rotate(15deg)}
+        .alien-arm-right{right:-12px;transform-origin:top center;animation:alienWave 2s ease-in-out infinite}
+
+        /* ===== SPEECH BUBBLE - HIDDEN BY DEFAULT ===== */
+        .speech-bubble{position:absolute;top:-60px;left:50%;transform:translateX(-50%);background:#FFF;border:3px solid #000;border-radius:15px;padding:10px 16px;font-size:16px;color:#3D2C2E;white-space:nowrap;box-shadow:3px 3px 0 #000;z-index:20;letter-spacing:1px;opacity:0;visibility:hidden}
+        .speech-bubble.visible{opacity:1;visibility:visible;animation:bubblePop .5s ease-out}
+        .speech-bubble::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#000}
+        .speech-bubble::before{content:'';position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#FFF;z-index:1}
+
+        /* ===== ALIEN GUN ===== */
+        .alien-gun{position:absolute;left:-35px;top:30px;opacity:0;transition:all .4s ease;transform:rotate(0deg)}
+        .alien-gun-body{width:30px;height:12px;background:linear-gradient(180deg,#555,#333);border:2px solid #000;border-radius:3px;position:relative}
+        .alien-gun-barrel{width:18px;height:6px;background:#444;border:2px solid #000;border-radius:2px;position:absolute;left:-16px;top:3px}
+        .alien-gun-barrel::after{content:'';position:absolute;left:-4px;top:-1px;width:6px;height:8px;background:#FF6B35;border-radius:50%;opacity:0;transition:opacity .2s}
+        .alien-wrapper.angry .alien-gun-barrel::after{opacity:1;animation:muzzleFlash .3s ease-in-out infinite}
+
+        /* ===== ALIEN STATES ===== */
+        .alien-wrapper.sad .alien-smile{border:3px solid #000;border-bottom:none;border-top:none;border-radius:25px 25px 0 0;height:10px}
+        .alien-wrapper.sad .alien-eye::before{top:12px}
+        .alien-wrapper.sad{animation:alienShake .3s ease-in-out infinite}
+        .alien-wrapper.sad .alien-arm-right{animation:none;transform:rotate(-10deg)}
+        .alien-wrapper.annoyed .alien-smile{width:20px;height:3px;background:#000;border:none;border-radius:0}
+        .alien-wrapper.annoyed .alien-eye{transform:scaleY(0.6)}
+        .alien-wrapper.annoyed .alien-arm-right{animation:none;transform:rotate(5deg)}
+        .alien-wrapper.angry .alien-smile{width:24px;height:8px;background:#000;border:none;border-radius:0 0 5px 5px}
+        .alien-wrapper.angry .alien-eye::before{top:2px}
+        .alien-wrapper.angry .alien-gun{opacity:1;transform:rotate(-10deg)}
+        .alien-wrapper.angry{animation:alienAngryShake .15s ease-in-out infinite}
+        .alien-wrapper.angry .alien-arm-right{animation:none;transform:rotate(-30deg)}
+        .alien-wrapper.angry .alien-body{background:linear-gradient(180deg,#C62828,#8E1515)}
+        .alien-wrapper.angry .alien-arm-left,.alien-wrapper.angry .alien-arm-right{background:linear-gradient(180deg,#C62828,#8E1515)}
+
+        /* ===== LASER BEAM ===== */
+        .laser-beam{position:fixed;top:50%;left:0;width:100vw;height:8px;background:linear-gradient(90deg,transparent,#FF006E,#FF6B35,#FFD90F,#FF6B35,#FF006E,transparent);border-radius:4px;z-index:9999;box-shadow:0 0 20px #FF006E,0 0 40px #FF6B35;transform:translateY(-50%);animation:laserShootCenter .5s ease-out forwards}
+        .screen-flash{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,0,0,.3);z-index:9998;animation:flashEffect .5s ease-out forwards;pointer-events:none}
+
+        /* ===== SERVICES ===== */
+        .services-section{max-width:1200px;margin:0 auto;padding:60px 20px}
+        .section-heading{font-size:48px;color:#FF6B35;text-shadow:3px 3px 0 #000;text-align:center;margin-bottom:40px;animation:gentlePop 4s ease-in-out infinite}
+        .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+        .service-card{background:#FFF;border:4px solid #000;border-radius:15px;padding:30px 20px;box-shadow:5px 5px 0 #000;text-align:center;transition:all .3s}
+        .service-card:hover{transform:translateY(-8px);box-shadow:5px 13px 0 #000}
+        .service-icon{font-size:50px;display:block;margin-bottom:15px;animation:iconBounce 3s ease-in-out infinite}
+        .service-title{font-size:26px;color:#FF6B35;margin-bottom:10px;text-shadow:1px 1px 0 #000}
+        .service-desc{font-size:16px;color:#3D2C2E;margin-bottom:14px}
+        .service-btn{display:inline-block;background:#FF6B35;color:#FFF;font-size:16px;border:3px solid #000;border-radius:10px;padding:10px 20px;box-shadow:3px 3px 0 #000;transition:all .3s}
+        .service-btn:hover{transform:scale(1.05);box-shadow:3px 5px 0 #000}
+
+        /* ===== CTA ===== */
+        .cta-section{background:#FFD90F;border-top:4px solid #000;border-bottom:4px solid #000;padding:60px 20px;text-align:center}
+        .cta-heading{font-size:42px;color:#3D2C2E;margin-bottom:12px}
+        .cta-subtext{font-size:20px;color:#3D2C2E;margin-bottom:25px}
+        .cta-btn{display:inline-block;background:#3D2C2E;color:#FFD90F;font-size:22px;padding:14px 40px;border:4px solid #000;border-radius:12px;box-shadow:5px 5px 0 #000;transition:all .3s}
+        .cta-btn:hover{transform:translateY(-3px);box-shadow:5px 8px 0 #000}
+
+        /* ===== FOOTER ===== */
+        .footer{background:#3D2C2E;color:#FFF8F0;padding:50px 20px 25px;border-top:4px solid #000}
+        .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1100px;margin:0 auto}
+        .footer-col h3{font-size:24px;color:#FFD90F;margin-bottom:15px}
+        .footer-col p,.footer-col a{font-size:16px;color:rgba(255,248,240,.8);line-height:1.8}
+        .footer-col a:hover{color:#FF6B35}
+        .footer-links{display:flex;flex-direction:column;gap:5px}
+        .footer-bottom{text-align:center;margin-top:35px;padding-top:20px;border-top:2px solid rgba(255,255,255,.15)}
+        .footer-bottom p{font-size:15px;color:rgba(255,255,255,.5)}
+        .footer-logo{font-size:28px;color:#FF6B35;text-shadow:2px 2px 0 #000;display:inline-block;margin-bottom:10px}
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:768px){
+            .nav-links{display:none}
+            .ufo-menu-btn{display:flex}
+            .services-grid{grid-template-columns:1fr}
+            .footer-grid{grid-template-columns:1fr;text-align:center}
+            .hero-heading{font-size:40px}
+            .hero-section{padding:50px 20px 60px;min-height:480px}
+            .hero-content{margin-bottom:25px}
+            .speech-bubble{font-size:14px;padding:8px 12px;top:-55px}
+        }
+        @media(max-width:480px){
+            .hero-heading{font-size:32px}
+            .section-heading{font-size:36px}
+            .hero-section{min-height:450px}
+            .speech-bubble{font-size:12px;top:-50px}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">WEB-BOON</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="services.html" class="active">Services</a>
+            <a href="packages.html">Packages</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="ufo-menu-btn" onclick="toggleMobileMenu()">
+            <div class="ufo-dome"></div>
+            <div class="ufo-saucer"></div>
+            <div class="ufo-lights"><div class="ufo-light"></div><div class="ufo-light"></div><div class="ufo-light"></div></div>
+        </button>
+    </nav>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <button class="mobile-menu-close ufo-close" onclick="closeMobileMenu()">
+            <div class="close-ufo-dome"></div>
+            <div class="close-ufo-saucer"></div>
+            <div class="close-ufo-lights"><div class="close-ufo-light"></div><div class="close-ufo-light"></div><div class="close-ufo-light"></div></div>
+        </button>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="packages.html">Packages</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-heading">Our Services</h1>
+            <p class="hero-subtext">Affordable, professional web solutions crafted to launch your brand into orbit 🚀</p>
+        </div>
+
+        <!-- ALIEN STARTS HIDDEN -->
+        <div class="alien-wrapper" id="alienWrapper">
+            <div class="speech-bubble" id="speechBubble">Welcome...</div>
+            <div class="alien-antenna left-antenna"></div>
+            <div class="alien-antenna right-antenna"></div>
+            <div class="alien-body">
+                <div class="alien-eye-container">
+                    <div class="alien-eye"></div>
+                    <div class="alien-eye"></div>
+                </div>
+                <div class="alien-smile"></div>
+            </div>
+            <div class="alien-arm-left"></div>
+            <div class="alien-arm-right"></div>
+            <div class="alien-gun">
+                <div class="alien-gun-body">
+                    <div class="alien-gun-barrel"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES (UPDATED LINKS) ===== -->
+    <section class="services-section">
+        <h2 class="section-heading">What We Offer</h2>
+        <div class="services-grid">
+            
+            <!-- 1. Web Design -->
+            <div class="service-card">
+                <span class="service-icon">🎨</span>
+                <h3 class="service-title">Web Design</h3>
+                <p class="service-desc">Beautiful designs for your brand</p>
+                <a href="web-design.html" class="service-btn">Explore Options</a>
+            </div>
+
+            <!-- 2. Web Development -->
+            <div class="service-card">
+                <span class="service-icon">💻</span>
+                <h3 class="service-title">Web Development</h3>
+                <p class="service-desc">Custom websites for any business</p>
+                <a href="web-development.html" class="service-btn">Explore Options</a>
+            </div>
+
+            <!-- 3. SEO Services -->
+            <div class="service-card">
+                <span class="service-icon">🚀</span>
+                <h3 class="service-title">SEO Services</h3>
+                <p class="service-desc">Get found on Google</p>
+                <a href="seo-services.html" class="service-btn">Explore Options</a>
+            </div>
+
+            <!-- 4. Mobile Responsive -->
+            <div class="service-card">
+                <span class="service-icon">📱</span>
+                <h3 class="service-title">Mobile Responsive</h3>
+                <p class="service-desc">Perfect on every device</p>
+                <a href="mobile-responsive.html" class="service-btn">Learn More</a>
+            </div>
+
+            <!-- 5. Speed Optimization -->
+            <div class="service-card">
+                <span class="service-icon">⚡</span>
+                <h3 class="service-title">Speed Optimization</h3>
+                <p class="service-desc">Lightning fast load times</p>
+                <a href="speed-optimization.html" class="service-btn">Learn More</a>
+            </div>
+
+            <!-- 6. Security -->
+            <div class="service-card">
+                <span class="service-icon">🔒</span>
+                <h3 class="service-title">Security</h3>
+                <p class="service-desc">SSL & protection included</p>
+                <a href="security.html" class="service-btn">Learn More</a>
+            </div>
+
+            <!-- 7. E-Commerce -->
+            <div class="service-card">
+                <span class="service-icon">🛒</span>
+                <h3 class="service-title">E-Commerce</h3>
+                <p class="service-desc">Online stores that sell</p>
+                <a href="ecommerce.html" class="service-btn">Explore Options</a>
+            </div>
+
+            <!-- 8. Landing Pages -->
+            <div class="service-card">
+                <span class="service-icon">🎯</span>
+                <h3 class="service-title">Landing Pages</h3>
+                <p class="service-desc">Pages that convert visitors</p>
+                <a href="landing-pages.html" class="service-btn">Explore Options</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta-section">
+        <h2 class="cta-heading">Ready to Get Started?</h2>
+        <p class="cta-subtext">Let's build something amazing</p>
+        <a href="contact.html" class="cta-btn">Contact Us</a>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-logo">WEB-BOON</span>
+                <p>Professional websites for your business</p>
+                <p>📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Services</a>
+                    <a href="packages.html">Packages</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p>📧 heisenberg.webboon@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 WEB-BOON | Designed by Heisenberg</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== AUDIO ===== */
+        let audioCtx = null;
+        function ensureAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        function playClickSound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sine';
+                o.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                o.start(); o.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+        function playLaserSound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sawtooth';
+                o.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                o.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+                g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                o.start(); o.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {}
+        }
+        function playScaredSound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sine';
+                o.frequency.setValueAtTime(600, audioCtx.currentTime);
+                o.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.2);
+                g.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                o.start(); o.stop(audioCtx.currentTime + 0.2);
+            } catch (e) {}
+        }
+        function playAnnoyedSound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'square';
+                o.frequency.setValueAtTime(200, audioCtx.currentTime);
+                o.frequency.setValueAtTime(250, audioCtx.currentTime + 0.05);
+                o.frequency.setValueAtTime(200, audioCtx.currentTime + 0.1);
+                g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                o.start(); o.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {}
+        }
+        function playAngrySound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sawtooth';
+                o.frequency.setValueAtTime(150, audioCtx.currentTime);
+                o.frequency.linearRampToValueAtTime(400, audioCtx.currentTime + 0.1);
+                o.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+                o.start(); o.stop(audioCtx.currentTime + 0.25);
+            } catch (e) {}
+        }
+
+        /* ===== MOBILE MENU (FIXED - ALL BUGS REMOVED) ===== */
+        function toggleMobileMenu() { 
+            playClickSound(); 
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+        function closeMobileMenu() { 
+            playClickSound(); 
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Auto-close on link click (MOBILE ONLY)
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-overlay a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // Close on resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        /* ===== ALIEN INTERACTION - FIXED ===== */
+        let alienState = 0;
+        let canClick = true;
+        const alienWrapper = document.getElementById('alienWrapper');
+        const speechBubble = document.getElementById('speechBubble');
+
+        const states = [
+            { message: "Welcome...", className: "" },
+            { message: "Don't beat me...", className: "sad" },
+            { message: "Do your work!", className: "annoyed" },
+            { message: "THAT'S IT!!!", className: "angry" }
+        ];
+
+        // Show alien after page loads
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                alienWrapper.classList.add('visible');
+                speechBubble.classList.add('visible');
+            }, 300);
+        });
+
+        alienWrapper.addEventListener('click', function (e) {
+            e.stopPropagation();
+
+            if (!canClick) return;
+
+            alienState = (alienState + 1) % 4;
+
+            alienWrapper.classList.remove('sad', 'annoyed', 'angry');
+
+            if (states[alienState].className) {
+                alienWrapper.classList.add(states[alienState].className);
+            }
+
+            speechBubble.style.animation = 'none';
+            speechBubble.offsetHeight;
+            speechBubble.style.animation = 'bubblePop .5s ease-out';
+            speechBubble.textContent = states[alienState].message;
+
+            if (alienState === 0) playClickSound();
+            else if (alienState === 1) playScaredSound();
+            else if (alienState === 2) playAnnoyedSound();
+            else if (alienState === 3) playAngrySound();
+
+            if (alienState === 3) {
+                canClick = false;
+                setTimeout(shootLaser, 500);
+                setTimeout(shootLaser, 900);
+                setTimeout(function () {
+                    resetAlien();
+                    canClick = true;
+                }, 2500);
+            }
+        });
+
+        alienWrapper.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            alienWrapper.click();
+        }, { passive: false });
+
+        function shootLaser() {
+            const laser = document.createElement('div');
+            laser.className = 'laser-beam';
+            document.body.appendChild(laser);
+
+            const flash = document.createElement('div');
+            flash.className = 'screen-flash';
+            document.body.appendChild(flash);
+
+            playLaserSound();
+
+            setTimeout(function () {
+                if (laser.parentNode) laser.remove();
+                if (flash.parentNode) flash.remove();
+            }, 600);
+        }
+
+        function resetAlien() {
+            alienState = 0;
+            alienWrapper.classList.remove('sad', 'annoyed', 'angry');
+            speechBubble.style.animation = 'none';
+            speechBubble.offsetHeight;
+            speechBubble.style.animation = 'bubblePop .5s ease-out';
+            speechBubble.textContent = states[0].message;
+        }
+
+        /* ===== REVEAL ON SCROLL ===== */
+        var revealEls = document.querySelectorAll('.service-card, .section-heading, .cta-section');
+        var revealObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function (el) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            revealObserver.observe(el);
+        });
+
+        /* ===== NAVBAR SCROLL SHADOW ===== */
+        window.addEventListener('scroll', function () {
+            var nav = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,.5)';
+            } else {
+                nav.style.boxShadow = '0 2px 10px rgba(0,0,0,.3)';
+            }
+        });
+    </script>
+</body>
+</html>

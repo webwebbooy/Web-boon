@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB-BOON | Breaking Bad Websites, Building Great Ones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Bangers',cursive;background:#FFF8F0;color:#3D2C2E;overflow-x:hidden}
+        a{text-decoration:none;color:inherit}
+        button{cursor:pointer;border:none;outline:none;background:none;font-family:'Bangers',cursive}
+
+        .navbar{position:sticky;top:0;z-index:1000;background:rgba(61,44,46,.95);backdrop-filter:blur(10px);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;box-shadow:0 2px 10px rgba(0,0,0,.3);border-bottom:4px solid #000;transition:box-shadow .3s}
+        .nav-logo{font-size:36px;color:#FF6B35;letter-spacing:2px;animation:logoPop 2.5s ease-in-out infinite;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;cursor:pointer;display:inline-block}
+        .nav-links{display:flex;align-items:center;gap:8px}
+        .nav-links a{font-size:18px;color:#FFF8F0;padding:8px 18px;border-radius:10px;border:3px solid transparent;transition:all .3s ease}
+        .nav-links a:hover{color:#FF6B35;border-color:#FF6B35;background:rgba(255,107,53,.1)}
+        .nav-links a.active{color:#FFF;background:#FF6B35;border-color:#000;box-shadow:3px 3px 0 #000}
+
+        .ufo-menu-btn{display:none;width:52px;height:55px;cursor:pointer;position:relative;background:none;border:none;animation:ufoFloat 3s ease-in-out infinite;box-shadow:0 8px 25px rgba(255,217,15,.5);border-radius:50%;z-index:1001;flex-direction:column;align-items:center;justify-content:center}
+        .ufo-menu-btn::after{content:'';position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);width:16px;height:28px;background:linear-gradient(180deg,rgba(255,217,15,.5),transparent);clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);animation:beamPulse 1.5s ease-in-out infinite}
+        .ufo-dome{width:22px;height:14px;background:linear-gradient(180deg,#87CEEB,#5CB8E6);border:2.5px solid #000;border-radius:50% 50% 0 0;position:relative;z-index:2}
+        .ufo-saucer{width:44px;height:14px;background:linear-gradient(180deg,#C0C0C0,#A0A0A0);border:2.5px solid #000;border-radius:50%;margin-top:-4px;position:relative;z-index:3}
+        .ufo-lights{display:flex;gap:6px;margin-top:-2px}
+        .ufo-light{width:6px;height:6px;border-radius:50%;animation:ufoLights 1.5s ease-in-out infinite}
+        .ufo-light:nth-child(1){background:#FF6B35}
+        .ufo-light:nth-child(2){background:#FFD90F}
+        .ufo-light:nth-child(3){background:#4ADE80}
+
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,44,46,.97);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:1001;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu-close.ufo-close{width:50px;height:45px;background:none;border:none;position:absolute;top:25px;right:25px;cursor:pointer;animation:ufoFloat 2s ease-in-out infinite}
+        .close-ufo-dome{width:22px;height:12px;background:linear-gradient(180deg,#F0F0F0,#D0D0D0);border:2px solid #000;border-radius:20px 20px 0 0;border-bottom:none;position:absolute;top:5px;left:50%;transform:translateX(-50%)}
+        .close-ufo-saucer{width:40px;height:12px;background:linear-gradient(180deg,#D8D8D8,#A8A8A8);border:2px solid #000;border-radius:50%;position:absolute;top:14px;left:50%;transform:translateX(-50%)}
+        .close-ufo-lights{display:flex;gap:5px;position:absolute;top:28px;left:50%;transform:translateX(-50%)}
+        .close-ufo-light{width:4px;height:4px;border-radius:50%;animation:ufoLights 1.2s ease-in-out infinite}
+        .close-ufo-light:nth-child(1){background:#FF6B35}
+        .close-ufo-light:nth-child(2){background:#FFD90F}
+        .close-ufo-light:nth-child(3){background:#4ADE80}
+        .mobile-menu-overlay a{font-size:36px;color:#FFF;padding:15px 40px;border-radius:12px;border:3px solid transparent;transition:all .3s;transform:translateY(20px);opacity:0}
+        .mobile-menu-overlay.active a{transform:translateY(0);opacity:1}
+        .mobile-menu-overlay.active a:nth-child(2){transition-delay:.1s}
+        .mobile-menu-overlay.active a:nth-child(3){transition-delay:.2s}
+        .mobile-menu-overlay.active a:nth-child(4){transition-delay:.3s}
+        .mobile-menu-overlay.active a:nth-child(5){transition-delay:.4s}
+        .mobile-menu-overlay a:hover{color:#FF6B35;border-color:#FF6B35}
+
+        @keyframes logoPop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.03) rotate(-2deg)}}
+        @keyframes ufoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes beamPulse{0%,100%{opacity:.3}50%{opacity:.8}}
+        @keyframes ufoLights{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+        @keyframes gentlePop{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+        @keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+        .hero-section{background:linear-gradient(180deg,#FFF8F0,#FFE8D6);padding:80px 40px;position:relative;min-height:400px}
+        .hero-inner{display:flex;align-items:center;justify-content:center;gap:60px;max-width:1200px;margin:0 auto}
+        .hero-text{flex:1}
+        .hero-heading{font-size:56px;color:#FF6B35;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;animation:gentlePop 4s ease-in-out infinite;margin-bottom:15px;line-height:1.1}
+        .hero-tagline{font-size:20px;color:#3D2C2E;opacity:.8;margin-bottom:25px}
+        .hero-btn{display:inline-block;background:#FF6B35;color:#FFF;font-size:22px;padding:14px 35px;border:4px solid #000;border-radius:12px;box-shadow:5px 5px 0 #000;transition:all .3s ease}
+        .hero-btn:hover{transform:translateY(-3px);box-shadow:5px 8px 0 #000}
+
+        .hero-macbook{flex:1;max-width:420px}
+        .macbook{position:relative;width:100%}
+        .macbook-screen{width:100%;aspect-ratio:16/10;background:#1a1a2e;border:4px solid #000;border-radius:12px 12px 0 0;padding:10px;position:relative;overflow:hidden}
+        #gameCanvas{width:100%;height:100%;display:block;cursor:pointer}
+        #scoreDisplay{position:absolute;top:10px;left:10px;font-family:'Bangers',cursive;font-size:16px;color:#FFF;background:rgba(0,0,0,.5);padding:5px 12px;border-radius:8px;z-index:10;pointer-events:none;letter-spacing:.5px}
+        #speedDisplay{position:absolute;top:10px;right:10px;font-family:'Bangers',cursive;font-size:16px;color:#FFD90F;background:rgba(0,0,0,.5);padding:5px 12px;border-radius:8px;z-index:10;pointer-events:none;letter-spacing:.5px}
+        #winOverlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(26,26,46,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:20;border-radius:8px 8px 0 0}
+        #winOverlay h3{font-family:'Bangers',cursive;font-size:32px;color:#FFD90F;text-shadow:2px 2px 0 #000;margin-bottom:6px}
+        #winOverlay p{font-family:'Bangers',cursive;font-size:16px;color:#FFF;opacity:.8;margin-bottom:14px}
+        #winOverlay button{font-family:'Bangers',cursive;font-size:18px;background:#FF6B35;color:#FFF;border:3px solid #000;border-radius:10px;padding:8px 24px;box-shadow:3px 3px 0 #000;cursor:pointer;transition:all .3s}
+        #winOverlay button:hover{transform:scale(1.06);box-shadow:3px 5px 0 #000}
+        .macbook-keyboard{width:106%;margin-left:-3%;height:12px;background:linear-gradient(180deg,#C8C8C8,#A8A8A8);border:3px solid #000;border-top:none;border-radius:0 0 4px 4px}
+        .macbook-base{width:116%;margin-left:-8%;height:7px;background:linear-gradient(180deg,#B0B0B0,#909090);border:2px solid #000;border-radius:0 0 8px 8px}
+        .wooden-table{width:130%;margin-left:-15%;height:22px;background:linear-gradient(180deg,#A0724A,#8B5E3C);border:4px solid #000;border-radius:4px;margin-top:-2px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+        .game-hint{text-align:center;font-size:16px;color:#3D2C2E;margin-top:12px;opacity:.7}
+
+        .services-preview{max-width:1000px;margin:60px auto;padding:0 20px;text-align:center}
+        .section-heading{font-size:42px;color:#FF6B35;text-shadow:2px 2px 0 #000;margin-bottom:10px;animation:gentlePop 4s ease-in-out infinite}
+        .section-subtext{font-size:18px;opacity:.8;margin-bottom:40px}
+        .preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin-bottom:35px}
+        .service-card{background:#FFF;border:4px solid #000;border-radius:15px;padding:30px 20px;box-shadow:5px 5px 0 #000;text-align:center;transition:all .3s}
+        .service-card:hover{transform:translateY(-8px);box-shadow:5px 13px 0 #000}
+        .service-icon{font-size:50px;display:block;margin-bottom:15px;animation:iconBounce 3s ease-in-out infinite}
+        .service-title{font-size:26px;color:#FF6B35;margin-bottom:10px;text-shadow:1px 1px 0 #000}
+        .service-desc{font-size:16px;color:#3D2C2E;margin-bottom:14px}
+        .service-btn{display:inline-block;background:#FF6B35;color:#FFF;font-size:16px;border:3px solid #000;border-radius:10px;padding:10px 20px;box-shadow:3px 3px 0 #000;transition:all .3s}
+        .service-btn:hover{transform:scale(1.05);box-shadow:3px 5px 0 #000}
+        .view-services-btn{display:inline-block;background:#3D2C2E;color:#FFD90F;font-size:20px;padding:12px 30px;border:4px solid #000;border-radius:10px;box-shadow:4px 4px 0 #000;transition:all .3s ease}
+        .view-services-btn:hover{transform:translateY(-3px);box-shadow:4px 7px 0 #000}
+
+        .cta-section{background:#FFD90F;border-top:4px solid #000;border-bottom:4px solid #000;padding:60px 20px;text-align:center}
+        .cta-heading{font-size:42px;color:#3D2C2E;margin-bottom:12px}
+        .cta-subtext{font-size:20px;color:#3D2C2E;margin-bottom:25px}
+        .cta-btn{display:inline-block;background:#3D2C2E;color:#FFD90F;font-size:22px;padding:14px 40px;border:4px solid #000;border-radius:12px;box-shadow:5px 5px 0 #000;transition:all .3s}
+        .cta-btn:hover{transform:translateY(-3px);box-shadow:5px 8px 0 #000}
+
+        .footer{background:#3D2C2E;color:#FFF8F0;padding:50px 20px 25px;border-top:4px solid #000}
+        .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1100px;margin:0 auto}
+        .footer-col h3{font-size:24px;color:#FFD90F;margin-bottom:15px}
+        .footer-col p,.footer-col a{font-size:16px;color:rgba(255,248,240,.8);line-height:1.8}
+        .footer-col a:hover{color:#FF6B35}
+        .footer-links{display:flex;flex-direction:column;gap:5px}
+        .footer-bottom{text-align:center;margin-top:35px;padding-top:20px;border-top:2px solid rgba(255,255,255,.15)}
+        .footer-bottom p{font-size:15px;color:rgba(255,255,255,.5)}
+        .footer-logo{font-size:28px;color:#FF6B35;text-shadow:2px 2px 0 #000;display:inline-block;margin-bottom:10px}
+
+        @media(max-width:1024px){
+            .preview-grid{grid-template-columns:repeat(2,1fr)}
+            .hero-inner{gap:40px}
+        }
+        @media(max-width:768px){
+            .nav-links{display:none}
+            .ufo-menu-btn{display:flex}
+            .hero-section{padding:60px 20px}
+            .hero-inner{flex-direction:column;text-align:center}
+            .hero-macbook{max-width:360px;width:100%}
+            .hero-heading{font-size:40px}
+            .preview-grid{grid-template-columns:1fr}
+            .footer-grid{grid-template-columns:1fr;text-align:center}
+        }
+        @media(max-width:480px){
+            .hero-heading{font-size:32px}
+            .section-heading{font-size:36px}
+            .hero-macbook{max-width:300px}
+            #scoreDisplay,#speedDisplay{font-size:13px;padding:4px 8px}
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">WEB-BOON</a>
+        <div class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="services.html">Services</a>
+            <a href="packages.html">Packages</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="ufo-menu-btn" onclick="toggleMobileMenu()">
+            <div class="ufo-dome"></div>
+            <div class="ufo-saucer"></div>
+            <div class="ufo-lights"><div class="ufo-light"></div><div class="ufo-light"></div><div class="ufo-light"></div></div>
+        </button>
+    </nav>
+
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <button class="mobile-menu-close ufo-close" onclick="closeMobileMenu()">
+            <div class="close-ufo-dome"></div>
+            <div class="close-ufo-saucer"></div>
+            <div class="close-ufo-lights"><div class="close-ufo-light"></div><div class="close-ufo-light"></div><div class="close-ufo-light"></div></div>
+        </button>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="packages.html">Packages</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <section class="hero-section">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <h1 class="hero-heading">Breaking Bad Websites, Building Great Ones</h1>
+                <p class="hero-tagline">We like Breaking Bad Boons</p>
+                <a href="packages.html" class="hero-btn">Get Started</a>
+            </div>
+            <div class="hero-macbook">
+                <div class="macbook">
+                    <div class="macbook-screen">
+                        <canvas id="gameCanvas"></canvas>
+                        <div id="scoreDisplay">Score: 0</div>
+                        <div id="speedDisplay">Speed: 1x</div>
+                        <div id="winOverlay">
+                            <h3>🏆 YOU WIN!</h3>
+                            <p>You popped 20 balls!</p>
+                            <button onclick="resetGame()">Play Again</button>
+                        </div>
+                    </div>
+                    <div class="macbook-keyboard"></div>
+                    <div class="macbook-base"></div>
+                </div>
+                <div class="wooden-table"></div>
+                <p class="game-hint">🏓 Tap the ball to pop it!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-preview">
+        <h2 class="section-heading">Our Services</h2>
+        <p class="section-subtext">We offer professional web solutions</p>
+        <div class="preview-grid">
+            <div class="service-card">
+                <span class="service-icon">🎨</span>
+                <h3 class="service-title">Web Design</h3>
+                <p class="service-desc">Beautiful designs for your brand</p>
+                <a href="services.html" class="service-btn">Learn More</a>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">💻</span>
+                <h3 class="service-title">Web Development</h3>
+                <p class="service-desc">Fast, responsive websites</p>
+                <a href="services.html" class="service-btn">Learn More</a>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">🚀</span>
+                <h3 class="service-title">SEO &amp; Performance</h3>
+                <p class="service-desc">Get found on Google</p>
+                <a href="services.html" class="service-btn">Learn More</a>
+            </div>
+        </div>
+        <a href="services.html" class="view-services-btn">View All Services →</a>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="cta-heading">Ready to Get Started?</h2>
+        <p class="cta-subtext">Let's build something amazing</p>
+        <a href="contact.html" class="cta-btn">Contact Us</a>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-logo">WEB-BOON</span>
+                <p>Professional websites for your business</p>
+                <p>📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Services</a>
+                    <a href="packages.html">Packages</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p>📧 heisenberg.webboon@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 WEB-BOON | Designed by Heisenberg</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== AUDIO ===== */
+        let audioCtx = null;
+        function ensureAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        function playClickSound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sine';
+                o.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                o.start(); o.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+        function playPopSound() {
+            try {
+                ensureAudio();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sine';
+                o.frequency.setValueAtTime(800, audioCtx.currentTime);
+                o.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+                g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                o.start(); o.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {}
+        }
+        function playWinSound() {
+            try {
+                ensureAudio();
+                const notes = [523, 659, 784, 1047];
+                notes.forEach(function (freq, i) {
+                    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.12);
+                    g.gain.setValueAtTime(0, audioCtx.currentTime);
+                    g.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + i * 0.12);
+                    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.12 + 0.3);
+                    o.start(audioCtx.currentTime + i * 0.12);
+                    o.stop(audioCtx.currentTime + i * 0.12 + 0.3);
+                });
+            } catch (e) {}
+        }
+
+        /* ===== MOBILE MENU ===== */
+        function toggleMobileMenu() { 
+            playClickSound(); 
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active'); 
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+        function closeMobileMenu() { 
+            playClickSound(); 
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.remove('active'); 
+            document.body.style.overflow = '';
+        }
+
+        // Auto-close mobile menu on link click
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-overlay a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // Close on resize and ESC
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        /* ===== PING PONG GAME WITH PROGRESSIVE SPEED ===== */
+        var gameInstance = null;
+
+        function resetGame() {
+            if (gameInstance) gameInstance.reset();
+        }
+
+        (function () {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const scoreEl = document.getElementById('scoreDisplay');
+            const speedEl = document.getElementById('speedDisplay');
+            const winOverlay = document.getElementById('winOverlay');
+            const ballColors = ['#FF6B35', '#FFD90F', '#4ADE80', '#FF006E', '#9D4EDD', '#00D8FF', '#FF3B3B'];
+            const WIN_SCORE = 20;
+
+            let score = 0;
+            let colorIndex = 0;
+            let particles = [];
+            let trail = [];
+            let ball = null;
+            let ballAlive = true;
+            let respawnTimer = null;
+
+            const baseSpeed = 2;
+            const maxSpeed = 8;
+            let speedMultiplier = 1;
+            let currentSpeed = baseSpeed;
+
+            function calcSpeed() {
+                speedMultiplier = 1 + (score * 0.25);
+                currentSpeed = Math.min(baseSpeed * speedMultiplier, maxSpeed);
+            }
+
+            function updateHUD() {
+                scoreEl.textContent = 'Score: ' + score;
+                var displayMult = speedMultiplier.toFixed(1).replace(/\.0$/, '');
+                speedEl.textContent = 'Speed: ' + displayMult + 'x';
+                var t = Math.min((currentSpeed - baseSpeed) / (maxSpeed - baseSpeed), 1);
+                if (t < 0.33) speedEl.style.color = '#4ADE80';
+                else if (t < 0.66) speedEl.style.color = '#FFD90F';
+                else speedEl.style.color = '#FF3B3B';
+            }
+
+            function resize() {
+                const rect = canvas.parentElement.getBoundingClientRect();
+                const pad = 20;
+                canvas.width = rect.width - pad;
+                canvas.height = rect.height - pad;
+            }
+
+            function spawnBall() {
+                resize();
+                calcSpeed();
+                updateHUD();
+                const r = 20;
+                ball = {
+                    x: r + Math.random() * (canvas.width - r * 2),
+                    y: r + Math.random() * (canvas.height - r * 2),
+                    dx: currentSpeed * (Math.random() > 0.5 ? 1 : -1),
+                    dy: currentSpeed * (Math.random() > 0.5 ? 1 : -1),
+                    radius: r,
+                    color: ballColors[colorIndex % ballColors.length]
+                };
+                trail = [];
+                ballAlive = true;
+            }
+
+            function createParticles(x, y, color) {
+                for (var i = 0; i < 10; i++) {
+                    var angle = Math.random() * Math.PI * 2;
+                    var speed = 2 + Math.random() * 3;
+                    particles.push({
+                        x: x, y: y,
+                        dx: Math.cos(angle) * speed,
+                        dy: Math.sin(angle) * speed,
+                        radius: 4,
+                        color: color,
+                        opacity: 1,
+                        life: 0
+                    });
+                }
+            }
+
+            function showWin() {
+                winOverlay.style.display = 'flex';
+                playWinSound();
+            }
+
+            function explodeBall(cx, cy) {
+                playPopSound();
+                createParticles(cx, cy, ball.color);
+                ballAlive = false;
+                trail = [];
+                score++;
+                colorIndex++;
+                calcSpeed();
+                updateHUD();
+
+                if (score >= WIN_SCORE) {
+                    if (respawnTimer) clearTimeout(respawnTimer);
+                    setTimeout(showWin, 350);
+                    return;
+                }
+
+                if (respawnTimer) clearTimeout(respawnTimer);
+                respawnTimer = setTimeout(function () { spawnBall(); }, 500);
+            }
+
+            function handleInteraction(px, py) {
+                if (!ballAlive || !ball) return;
+                var rect = canvas.getBoundingClientRect();
+                var mx = (px - rect.left) * (canvas.width / rect.width);
+                var my = (py - rect.top) * (canvas.height / rect.height);
+                var dist = Math.sqrt((mx - ball.x) * (mx - ball.x) + (my - ball.y) * (my - ball.y));
+                if (dist <= ball.radius + 8) {
+                    explodeBall(ball.x, ball.y);
+                }
+            }
+
+            canvas.addEventListener('click', function (e) { handleInteraction(e.clientX, e.clientY); });
+            canvas.addEventListener('touchstart', function (e) {
+                e.preventDefault();
+                var t = e.touches[0];
+                handleInteraction(t.clientX, t.clientY);
+            }, { passive: false });
+
+            function draw() {
+                resize();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (ballAlive && ball) {
+                    var trailLen = Math.floor(Math.min((currentSpeed / baseSpeed) * 4, 16));
+
+                    trail.push({ x: ball.x, y: ball.y, color: ball.color });
+                    while (trail.length > trailLen) trail.shift();
+
+                    for (var t = 0; t < trail.length; t++) {
+                        var frac = t / trail.length;
+                        var alpha = frac * 0.35;
+                        var r = ball.radius * (0.3 + frac * 0.5);
+                        ctx.globalAlpha = alpha;
+                        ctx.beginPath();
+                        ctx.arc(trail[t].x, trail[t].y, r, 0, Math.PI * 2);
+                        ctx.fillStyle = trail[t].color;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                    ctx.globalAlpha = 1;
+
+                    if (currentSpeed > 3.5) {
+                        var lineAlpha = Math.min((currentSpeed - 3.5) / (maxSpeed - 3.5), 0.6);
+                        ctx.globalAlpha = lineAlpha;
+                        ctx.strokeStyle = ball.color;
+                        ctx.lineWidth = 2;
+                        var normDx = ball.dx / currentSpeed;
+                        var normDy = ball.dy / currentSpeed;
+                        for (var li = 0; li < 3; li++) {
+                            var offsetX = (Math.random() - 0.5) * ball.radius;
+                            var offsetY = (Math.random() - 0.5) * ball.radius;
+                            var lineLen = 8 + currentSpeed * 3;
+                            ctx.beginPath();
+                            ctx.moveTo(ball.x + offsetX, ball.y + offsetY);
+                            ctx.lineTo(ball.x + offsetX - normDx * lineLen, ball.y + offsetY - normDy * lineLen);
+                            ctx.stroke();
+                        }
+                        ctx.globalAlpha = 1;
+                    }
+
+                    if (currentSpeed > 3) {
+                        var glowIntensity = Math.min((currentSpeed - 3) / (maxSpeed - 3), 1);
+                        var glowRadius = ball.radius + 6 + glowIntensity * 12;
+                        var gradient = ctx.createRadialGradient(ball.x, ball.y, ball.radius * 0.5, ball.x, ball.y, glowRadius);
+                        gradient.addColorStop(0, ball.color + '66');
+                        gradient.addColorStop(1, ball.color + '00');
+                        ctx.beginPath();
+                        ctx.arc(ball.x, ball.y, glowRadius, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+
+                    ball.x += ball.dx;
+                    ball.y += ball.dy;
+
+                    if (ball.x - ball.radius <= 0) { ball.x = ball.radius; ball.dx = Math.abs(ball.dx); }
+                    if (ball.x + ball.radius >= canvas.width) { ball.x = canvas.width - ball.radius; ball.dx = -Math.abs(ball.dx); }
+                    if (ball.y - ball.radius <= 0) { ball.y = ball.radius; ball.dy = Math.abs(ball.dy); }
+                    if (ball.y + ball.radius >= canvas.height) { ball.y = canvas.height - ball.radius; ball.dy = -Math.abs(ball.dy); }
+
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = ball.color;
+                    ctx.fill();
+                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = '#000';
+                    ctx.stroke();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(ball.x - 5, ball.y - 6, ball.radius * 0.25, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+                    ctx.fill();
+                    ctx.closePath();
+                }
+
+                for (var i = particles.length - 1; i >= 0; i--) {
+                    var p = particles[i];
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    p.life += 1;
+                    p.opacity = Math.max(0, 1 - p.life / 30);
+                    if (p.opacity <= 0) { particles.splice(i, 1); continue; }
+                    ctx.globalAlpha = p.opacity;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                    ctx.closePath();
+                    ctx.globalAlpha = 1;
+                }
+
+                requestAnimationFrame(draw);
+            }
+
+            gameInstance = {
+                reset: function () {
+                    score = 0;
+                    colorIndex = 0;
+                    speedMultiplier = 1;
+                    currentSpeed = baseSpeed;
+                    particles = [];
+                    trail = [];
+                    winOverlay.style.display = 'none';
+                    playClickSound();
+                    spawnBall();
+                }
+            };
+
+            spawnBall();
+            draw();
+
+            window.addEventListener('resize', function () {
+                if (ballAlive && ball) {
+                    resize();
+                    if (ball.x > canvas.width - ball.radius) ball.x = canvas.width - ball.radius;
+                    if (ball.y > canvas.height - ball.radius) ball.y = canvas.height - ball.radius;
+                }
+            });
+        })();
+
+        /* ===== REVEAL ON SCROLL ===== */
+        var revealEls = document.querySelectorAll('.service-card, .section-heading, .cta-section');
+        var revealObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.15 });
+        revealEls.forEach(function (el) {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            revealObserver.observe(el);
+        });
+
+        /* ===== NAVBAR SCROLL SHADOW ===== */
+        window.addEventListener('scroll', function () {
+            var nav = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,.5)';
+            } else {
+                nav.style.boxShadow = '0 2px 10px rgba(0,0,0,.3)';
+            }
+        });
+    </script>
+</body>
+</html>

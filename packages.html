@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packages | WEB-BOON - Affordable Web Development Plans</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <style>
+        /* ========== BASE ========== */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth;overflow-x:hidden}
+        body{font-family:'Bangers',cursive;background:#FFF8F0;color:#3D2C2E;overflow-x:hidden}
+        a{text-decoration:none;color:inherit}
+        button{cursor:pointer;border:none;background:none;font-family:'Bangers',cursive}
+        ::selection{background:#FF6B35;color:#FFF}
+
+        /* Scrollbar */
+        ::-webkit-scrollbar{width:10px}
+        ::-webkit-scrollbar-track{background:#FFF8F0}
+        ::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:5px;border:2px solid #FFF8F0}
+        ::-webkit-scrollbar-thumb:hover{background:#e55a2b}
+
+        /* ========== NAVBAR ========== */
+        .navbar{position:sticky;top:0;z-index:1000;background:rgba(61,44,46,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;box-shadow:0 2px 10px rgba(0,0,0,.3);border-bottom:4px solid #000}
+        .nav-logo{font-size:36px;color:#FF6B35;letter-spacing:2px;animation:logoPop 2.5s ease-in-out infinite;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;cursor:pointer}
+        .nav-links{display:flex;align-items:center;gap:8px}
+        .nav-links a{font-size:18px;color:#FFF8F0;padding:8px 18px;border-radius:10px;border:3px solid transparent;transition:all .3s ease;letter-spacing:1px}
+        .nav-links a:hover{color:#FF6B35;border-color:#FF6B35;background:rgba(255,107,53,.1);transform:translateY(-2px)}
+        .nav-links a.active{color:#FFF;background:#FF6B35;border-color:#000;box-shadow:3px 3px 0 #000}
+
+        /* ========== UFO MENU BUTTON (Navbar) ========== */
+        .ufo-menu-btn{display:none;width:52px;height:55px;cursor:pointer;position:relative;animation:ufoFloat 3s ease-in-out infinite;z-index:1001;flex-direction:column;align-items:center;justify-content:center}
+        .ufo-menu-btn::after{content:'';position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);width:16px;height:28px;background:linear-gradient(180deg,rgba(255,217,15,.5),transparent);clip-path:polygon(30% 0%,70% 0%,100% 100%,0% 100%);animation:beamPulse 1.5s ease-in-out infinite}
+        .ufo-dome{width:22px;height:14px;background:linear-gradient(180deg,#87CEEB,#5CB8E6);border:2.5px solid #000;border-radius:50% 50% 0 0;position:relative;z-index:2}
+        .ufo-saucer{width:44px;height:14px;background:linear-gradient(180deg,#C0C0C0,#A0A0A0);border:2.5px solid #000;border-radius:50%;margin-top:-4px;position:relative;z-index:3}
+        .ufo-lights{display:flex;gap:6px;margin-top:-2px;position:relative;z-index:1}
+        .ufo-light{width:6px;height:6px;border-radius:50%;animation:ufoLights 1.5s ease-in-out infinite}
+        .ufo-light:nth-child(1){background:#FF6B35;animation-delay:0s}
+        .ufo-light:nth-child(2){background:#FFD90F;animation-delay:.3s}
+        .ufo-light:nth-child(3){background:#4ADE80;animation-delay:.6s}
+
+        @keyframes ufoLights{0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 6px currentColor}50%{opacity:.3;transform:scale(.6);box-shadow:0 0 2px currentColor}}
+
+        /* ========== MOBILE MENU ========== */
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,44,46,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:1001;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu-overlay a{font-size:36px;color:#FFF;letter-spacing:3px;padding:15px 40px;border-radius:12px;border:3px solid transparent;transition:all .3s ease;transform:translateY(20px);opacity:0}
+        .mobile-menu-overlay.active a{transform:translateY(0);opacity:1}
+        .mobile-menu-overlay.active a:nth-child(2){transition-delay:.1s}
+        .mobile-menu-overlay.active a:nth-child(3){transition-delay:.2s}
+        .mobile-menu-overlay.active a:nth-child(4){transition-delay:.3s}
+        .mobile-menu-overlay.active a:nth-child(5){transition-delay:.4s}
+        .mobile-menu-overlay a:hover{color:#FF6B35;border-color:#FF6B35;background:rgba(255,107,53,.1);transform:scale(1.05)}
+
+        /* UFO Close Button */
+        .mobile-menu-close.ufo-close{width:50px;height:45px;position:absolute;top:25px;right:25px;cursor:pointer;animation:ufoFloat 2s ease-in-out infinite;display:flex;align-items:center;justify-content:center}
+        .mobile-menu-close.ufo-close:hover{transform:scale(1.15);filter:drop-shadow(0 0 10px rgba(255,107,53,.6))}
+        .close-ufo-dome{width:22px;height:12px;background:linear-gradient(180deg,#F0F0F0,#D0D0D0);border:2px solid #000;border-radius:20px 20px 0 0;border-bottom:none;position:absolute;top:5px;left:50%;transform:translateX(-50%)}
+        .close-ufo-saucer{width:40px;height:12px;background:linear-gradient(180deg,#D8D8D8,#A8A8A8);border:2px solid #000;border-radius:50%;position:absolute;top:14px;left:50%;transform:translateX(-50%)}
+        .close-ufo-lights{display:flex;gap:5px;position:absolute;top:28px;left:50%;transform:translateX(-50%)}
+        .close-ufo-light{width:4px;height:4px;border-radius:50%;animation:ufoLights 1.2s ease-in-out infinite}
+        .close-ufo-light:nth-child(1){background:#FF6B35;animation-delay:0s}
+        .close-ufo-light:nth-child(2){background:#FFD90F;animation-delay:.2s}
+        .close-ufo-light:nth-child(3){background:#4ADE80;animation-delay:.4s}
+
+        /* ========== KEYFRAMES ========== */
+        @keyframes logoPop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.03) rotate(-2deg)}}
+        @keyframes ufoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes beamPulse{0%,100%{opacity:.3}50%{opacity:.8}}
+        @keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+        /* ========== HERO SECTION (UFO Container) ========== */
+        .hero-section{
+            background:linear-gradient(180deg,#FFF8F0,#FFE8D6);
+            padding:80px 20px 100px;
+            text-align:center;
+            position:relative;
+            overflow:hidden;
+            min-height:280px;
+        }
+
+        .hero-content{
+            position:relative;
+            z-index:2;
+        }
+
+        .hero-heading{font-size:56px;color:#FF6B35;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;margin-bottom:15px;letter-spacing:3px;animation:logoPop 4s ease-in-out infinite}
+        .hero-subtext{font-size:22px;color:#3D2C2E;letter-spacing:1.5px;opacity:.85}
+
+        /* ========== FLYING UFO (Inside Hero Only) ========== */
+        .flying-ufo{
+            position:absolute;
+            width:70px;
+            height:55px;
+            cursor:pointer;
+            z-index:10;
+            transition:filter .2s;
+            bottom:20px;
+            left:-100px;
+        }
+
+        .flying-ufo:hover{filter:drop-shadow(0 0 15px #FFD90F)}
+
+        .flying-ufo-dome{width:30px;height:18px;background:linear-gradient(180deg,#87CEEB,#5CB8E6);border:3px solid #000;border-radius:50% 50% 0 0;position:absolute;top:0;left:50%;transform:translateX(-50%)}
+
+        .flying-ufo-saucer{width:60px;height:18px;background:linear-gradient(180deg,#C0C0C0,#909090);border:3px solid #000;border-radius:50%;position:absolute;top:14px;left:50%;transform:translateX(-50%)}
+
+        .flying-ufo-lights{display:flex;justify-content:center;gap:8px;position:absolute;top:28px;left:50%;transform:translateX(-50%)}
+
+        .flying-ufo-light{width:8px;height:8px;border-radius:50%;animation:flyingUfoLights .8s ease-in-out infinite}
+        .flying-ufo-light:nth-child(1){background:#FF6B35;animation-delay:0s}
+        .flying-ufo-light:nth-child(2){background:#FFD90F;animation-delay:.2s}
+        .flying-ufo-light:nth-child(3){background:#4ADE80;animation-delay:.4s}
+
+        @keyframes flyingUfoLights{0%,100%{opacity:1;transform:scale(1);box-shadow:0 0 10px currentColor}50%{opacity:.4;transform:scale(.7);box-shadow:0 0 4px currentColor}}
+
+        .flying-ufo-beam{position:absolute;top:38px;left:50%;transform:translateX(-50%);width:20px;height:45px;background:linear-gradient(180deg,rgba(255,217,15,.6),rgba(255,217,15,.2),transparent);clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%);animation:beamGlow 1s ease-in-out infinite}
+
+        @keyframes beamGlow{0%,100%{opacity:.6}50%{opacity:.9}}
+
+        /* Flying animation */
+        .flying-ufo.flying{animation:ufoWobble 1s ease-in-out infinite}
+
+        @keyframes ufoWobble{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+
+        /* Warning state */
+        .flying-ufo.warning{animation:ufoShake .1s ease-in-out infinite}
+        .flying-ufo.warning .flying-ufo-dome{background:linear-gradient(180deg,#FF6B6B,#FF3B3B)}
+        .flying-ufo.warning .flying-ufo-saucer{background:linear-gradient(180deg,#FF4444,#CC0000)}
+        .flying-ufo.warning .flying-ufo-beam{background:linear-gradient(180deg,rgba(255,0,0,.6),rgba(255,0,0,.2),transparent)}
+
+        @keyframes ufoShake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-5px) rotate(-5deg)}75%{transform:translateX(5px) rotate(5deg)}}
+
+        /* Explosion particle */
+        .ufo-particle{position:fixed;border-radius:50%;pointer-events:none;z-index:9998}
+
+        /* Screen flash */
+        .explosion-flash{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,50,0,.3);z-index:9999;pointer-events:none;animation:flashBang .4s ease-out forwards}
+
+        @keyframes flashBang{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+
+        /* ========== PACKAGES ========== */
+        .packages-section{max-width:1100px;margin:0 auto;padding:60px 20px}
+        .packages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;align-items:stretch}
+
+        .package-card{background:#FFF;border:4px solid #000;border-radius:20px;padding:35px 25px;box-shadow:6px 6px 0 #000;text-align:center;position:relative;transition:all .3s ease;display:flex;flex-direction:column;opacity:0;transform:translateY(40px)}
+        .package-card.revealed{opacity:1;transform:translateY(0)}
+        .package-card:hover{transform:translateY(-10px);box-shadow:6px 16px 0 #000}
+        .package-card.revealed:hover{transform:translateY(-10px)}
+
+        .package-card.popular{border-color:#FF6B35;transform:scale(1.05);z-index:2}
+        .package-card.popular.revealed{transform:scale(1.05)}
+        .package-card.popular.revealed:hover{transform:scale(1.05) translateY(-10px)}
+
+        .popular-badge{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:#FF6B35;color:#FFF;font-size:14px;padding:6px 20px;border:3px solid #000;border-radius:20px;letter-spacing:1px;box-shadow:2px 2px 0 #000;white-space:nowrap}
+
+        .package-icon{font-size:50px;margin-bottom:15px;display:block;animation:iconBounce 3s ease-in-out infinite}
+        .package-card:nth-child(2) .package-icon{animation-delay:.15s}
+        .package-card:nth-child(3) .package-icon{animation-delay:.3s}
+
+        .package-name{font-size:32px;color:#3D2C2E;letter-spacing:2px;margin-bottom:10px}
+        .package-price{font-size:48px;color:#FF6B35;letter-spacing:1px;margin-bottom:5px;text-shadow:2px 2px 0 #000}
+        .package-desc{font-size:16px;color:#3D2C2E;opacity:.7;margin-bottom:25px}
+
+        .package-features{list-style:none;text-align:left;margin-bottom:30px;flex-grow:1}
+        .package-features li{font-size:16px;color:#3D2C2E;padding:10px 0;border-bottom:2px dashed rgba(0,0,0,.1);letter-spacing:.5px}
+        .package-features li::before{content:'✓';color:#4ADE80;font-weight:bold;margin-right:10px;font-size:18px}
+        .package-features li.not-included{opacity:.4;text-decoration:line-through}
+        .package-features li.not-included::before{content:'✗';color:#FF6B35}
+
+        .package-btn{display:inline-block;background:#FF6B35;color:#FFF;font-size:20px;padding:14px 30px;border:4px solid #000;border-radius:12px;letter-spacing:1.5px;box-shadow:4px 4px 0 #000;transition:all .3s ease;cursor:pointer;margin-top:auto}
+        .package-btn:hover{transform:scale(1.05);box-shadow:4px 6px 0 #000;background:#e55a2b}
+
+        .package-card.popular .package-btn{background:#3D2C2E;color:#FFD90F}
+        .package-card.popular .package-btn:hover{background:#2a1e20}
+
+        /* ========== ADD-ONS ========== */
+        .addons-section{background:#FFE8D6;padding:60px 20px;text-align:center;border-top:4px solid #000;border-bottom:4px solid #000}
+        .section-heading{font-size:42px;color:#FF6B35;text-shadow:2px 2px 0 #000;margin-bottom:10px;letter-spacing:2px}
+        .section-subtext{font-size:18px;color:#3D2C2E;opacity:.8;margin-bottom:40px}
+
+        .addons-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1000px;margin:0 auto}
+
+        .addon-card{background:#FFF;border:3px solid #000;border-radius:12px;padding:20px 15px;box-shadow:4px 4px 0 #000;transition:all .3s ease;opacity:0;transform:translateY(40px)}
+        .addon-card.revealed{opacity:1;transform:translateY(0)}
+        .addon-card:hover{transform:translateY(-5px);box-shadow:4px 9px 0 #000}
+
+        .addon-icon{font-size:36px;margin-bottom:10px;display:block}
+        .addon-name{font-size:20px;color:#3D2C2E;margin-bottom:8px;letter-spacing:1px}
+        .addon-price{font-size:22px;color:#FF6B35;letter-spacing:1px}
+
+        /* ========== CTA ========== */
+        .cta-section{background:#FFD90F;border-top:4px solid #000;border-bottom:4px solid #000;padding:60px 20px;text-align:center;opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+        .cta-section.revealed{opacity:1;transform:translateY(0)}
+        .cta-heading{font-size:42px;color:#3D2C2E;text-shadow:2px 2px 0 rgba(0,0,0,.1);margin-bottom:12px;letter-spacing:2px}
+        .cta-subtext{font-size:20px;color:#3D2C2E;opacity:.8;margin-bottom:25px;letter-spacing:1px}
+        .cta-btn{display:inline-block;background:#3D2C2E;color:#FFD90F;font-size:22px;padding:14px 40px;border:4px solid #000;border-radius:12px;letter-spacing:2px;box-shadow:5px 5px 0 #000;transition:all .3s ease;cursor:pointer}
+        .cta-btn:hover{transform:translateY(-3px);box-shadow:5px 8px 0 #000;background:#2a1e20}
+
+        /* ========== FOOTER ========== */
+        .footer{background:#3D2C2E;color:#FFF8F0;padding:50px 20px 25px;border-top:4px solid #000}
+        .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1100px;margin:0 auto}
+        .footer-col h3{font-size:24px;color:#FFD90F;letter-spacing:2px;margin-bottom:15px}
+        .footer-col p{font-size:16px;color:rgba(255,248,240,.8);letter-spacing:.8px;line-height:1.8}
+        .footer-logo{font-size:28px;color:#FF6B35;letter-spacing:2px;text-shadow:2px 2px 0 #000;display:inline-block;margin-bottom:10px}
+        .footer-links{display:flex;flex-direction:column;gap:5px}
+        .footer-links a{font-size:16px;color:rgba(255,248,240,.8);padding:3px 0;transition:color .3s ease}
+        .footer-links a:hover{color:#FF6B35}
+        .footer-bottom{text-align:center;margin-top:35px;padding-top:20px;border-top:2px solid rgba(255,255,255,.15)}
+        .footer-bottom p{font-size:15px;color:rgba(255,255,255,.5);letter-spacing:1px}
+
+        /* ========== RESPONSIVE ========== */
+        @media(max-width:1024px){
+            .packages-grid{gap:20px}
+            .package-card.popular{transform:scale(1.02)}
+            .package-card.popular.revealed{transform:scale(1.02)}
+        }
+
+        @media(max-width:768px){
+            .nav-links{display:none}
+            .ufo-menu-btn{display:flex}
+            .navbar{padding:0 20px}
+
+            .hero-heading{font-size:40px}
+            .hero-subtext{font-size:18px}
+            .hero-section{padding:60px 20px 80px;min-height:220px}
+
+            .packages-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}
+            .package-card.popular,.package-card.popular.revealed{transform:scale(1)}
+            .package-card.popular.revealed:hover{transform:translateY(-10px)}
+
+            .addons-grid{grid-template-columns:repeat(2,1fr)}
+
+            .footer-grid{grid-template-columns:1fr;gap:25px;text-align:center}
+            .footer-links{align-items:center}
+
+            .cta-heading{font-size:32px}
+
+            /* Smaller flying UFO on mobile */
+            .flying-ufo{width:50px;height:40px}
+            .flying-ufo-dome{width:22px;height:14px}
+            .flying-ufo-saucer{width:45px;height:14px;top:12px}
+            .flying-ufo-lights{top:22px}
+            .flying-ufo-light{width:6px;height:6px}
+            .flying-ufo-beam{width:15px;height:35px;top:30px}
+        }
+
+        @media(max-width:480px){
+            .nav-logo{font-size:26px}
+            .hero-heading{font-size:34px}
+            .hero-section{min-height:200px}
+            .addons-grid{grid-template-columns:1fr;max-width:300px;margin:0 auto}
+            .package-price{font-size:40px}
+            .cta-heading{font-size:28px}
+            .cta-btn{font-size:18px;padding:12px 30px}
+            .mobile-menu-overlay a{font-size:28px;padding:12px 30px}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">WEB-BOON</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="packages.html" class="active">Packages</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="ufo-menu-btn" id="ufoMenuBtn">
+            <div class="ufo-dome"></div>
+            <div class="ufo-saucer"></div>
+            <div class="ufo-lights">
+                <div class="ufo-light"></div>
+                <div class="ufo-light"></div>
+                <div class="ufo-light"></div>
+            </div>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <button class="mobile-menu-close ufo-close" id="closeMenuBtn">
+            <div class="close-ufo-dome"></div>
+            <div class="close-ufo-saucer"></div>
+            <div class="close-ufo-lights">
+                <div class="close-ufo-light"></div>
+                <div class="close-ufo-light"></div>
+                <div class="close-ufo-light"></div>
+            </div>
+        </button>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="packages.html">Packages</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- HERO SECTION (UFO flies here only) -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-content">
+            <h1 class="hero-heading">Our Packages</h1>
+            <p class="hero-subtext">Simple pricing, no hidden fees. Pick what works for you! 💰</p>
+        </div>
+
+        <!-- FLYING UFO (contained inside hero) -->
+        <div class="flying-ufo" id="flyingUfo">
+            <div class="flying-ufo-dome"></div>
+            <div class="flying-ufo-saucer"></div>
+            <div class="flying-ufo-lights">
+                <div class="flying-ufo-light"></div>
+                <div class="flying-ufo-light"></div>
+                <div class="flying-ufo-light"></div>
+            </div>
+            <div class="flying-ufo-beam"></div>
+        </div>
+    </section>
+
+    <!-- 3 PRICING CARDS -->
+    <section class="packages-section">
+        <div class="packages-grid">
+
+            <!-- STARTER -->
+            <div class="package-card reveal">
+                <span class="package-icon">🚀</span>
+                <h3 class="package-name">Starter</h3>
+                <div class="package-price">₹2,000</div>
+                <p class="package-desc">Perfect for personal sites</p>
+                <ul class="package-features">
+                    <li>1-3 Pages</li>
+                    <li>Mobile Responsive</li>
+                    <li>Contact Form</li>
+                    <li>3 Day Delivery</li>
+                    <li class="not-included">SEO Optimization</li>
+                    <li class="not-included">Custom Graphics</li>
+                    <li class="not-included">Maintenance</li>
+                </ul>
+                <a href="contact.html" class="package-btn">Get Started</a>
+            </div>
+
+            <!-- BUSINESS (Popular) -->
+            <div class="package-card popular reveal">
+                <span class="popular-badge">MOST POPULAR</span>
+                <span class="package-icon">💼</span>
+                <h3 class="package-name">Business</h3>
+                <div class="package-price">₹5,000</div>
+                <p class="package-desc">Best for small businesses</p>
+                <ul class="package-features">
+                    <li>5-7 Pages</li>
+                    <li>Mobile Responsive</li>
+                    <li>Contact Form</li>
+                    <li>5 Day Delivery</li>
+                    <li>Basic SEO</li>
+                    <li>Social Media Links</li>
+                    <li class="not-included">Monthly Maintenance</li>
+                </ul>
+                <a href="contact.html" class="package-btn">Get Started</a>
+            </div>
+
+            <!-- PREMIUM -->
+            <div class="package-card reveal">
+                <span class="package-icon">👑</span>
+                <h3 class="package-name">Premium</h3>
+                <div class="package-price">₹10,000</div>
+                <p class="package-desc">Full business solution</p>
+                <ul class="package-features">
+                    <li>10+ Pages</li>
+                    <li>Mobile Responsive</li>
+                    <li>Contact Form</li>
+                    <li>7 Day Delivery</li>
+                    <li>Advanced SEO</li>
+                    <li>Custom Graphics</li>
+                    <li>1 Month Maintenance</li>
+                </ul>
+                <a href="contact.html" class="package-btn">Get Started</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ADD-ONS -->
+    <section class="addons-section">
+        <h2 class="section-heading">Add-Ons</h2>
+        <p class="section-subtext">Boost your package with extras</p>
+        <div class="addons-grid">
+            <div class="addon-card reveal">
+                <span class="addon-icon">🎨</span>
+                <h4 class="addon-name">Logo Design</h4>
+                <div class="addon-price">₹500</div>
+            </div>
+            <div class="addon-card reveal">
+                <span class="addon-icon">📧</span>
+                <h4 class="addon-name">Business Email</h4>
+                <div class="addon-price">₹300/yr</div>
+            </div>
+            <div class="addon-card reveal">
+                <span class="addon-icon">🔧</span>
+                <h4 class="addon-name">Extra Maintenance</h4>
+                <div class="addon-price">₹500/mo</div>
+            </div>
+            <div class="addon-card reveal">
+                <span class="addon-icon">📈</span>
+                <h4 class="addon-name">SEO Boost</h4>
+                <div class="addon-price">₹1,000</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section reveal">
+        <h2 class="cta-heading">Need a Custom Package?</h2>
+        <p class="cta-subtext">We can create something just for you!</p>
+        <a href="contact.html" class="cta-btn">Contact Us</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-logo">WEB-BOON</span>
+                <p>We create affordable, professional websites for businesses, startups, and individuals.</p>
+                <p style="margin-top:8px">📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Services</a>
+                    <a href="packages.html">Packages</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p>📧 heisenberg.webboon@gmail.com</p>
+                <p>📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 WEB-BOON | Designed by Heisenberg</p>
+        </div>
+    </footer>
+
+    <script>
+        // ========== AUDIO CONTEXT ========== //
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        document.addEventListener('click', initAudio, { once: true });
+        document.addEventListener('touchstart', initAudio, { once: true });
+
+        function playClickSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+
+        // ========== MOBILE MENU ========== //
+        function toggleMobileMenu() {
+            playClickSound();
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('ufoMenuBtn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            playClickSound();
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('ufoMenuBtn');
+            menu.classList.remove('active');
+            btn.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('ufoMenuBtn').addEventListener('click', toggleMobileMenu);
+        document.getElementById('closeMenuBtn').addEventListener('click', closeMobileMenu);
+
+        // Auto-close menu on link click (MOBILE ONLY)
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-overlay a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        // ========== REVEAL ON SCROLL ========== //
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal, .package-card, .addon-card');
+            const windowHeight = window.innerHeight;
+            reveals.forEach(function(el, index) {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    setTimeout(function() {
+                        el.classList.add('revealed');
+                    }, index * 80);
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+
+        // ========== FLYING UFO (Hero Section Only) ========== //
+        let ufoElement;
+        let heroSection;
+        let ufoX = -80;
+        let ufoSpeed = 2;
+        let ufoDirection = 1;
+        let isUfoExploding = false;
+        let ufoAnimationId;
+
+        function initFlyingUfo() {
+            ufoElement = document.getElementById('flyingUfo');
+            heroSection = document.getElementById('heroSection');
+
+            resetUfoPosition();
+
+            ufoElement.addEventListener('click', handleUfoClick);
+            ufoElement.addEventListener('touchstart', handleUfoClick);
+
+            animateUfo();
+        }
+
+        function resetUfoPosition() {
+            var heroWidth = heroSection.offsetWidth;
+
+            ufoX = -80;
+            ufoDirection = 1;
+            ufoSpeed = 1.5 + Math.random() * 1.5;
+
+            ufoElement.style.left = ufoX + 'px';
+            ufoElement.style.display = 'block';
+            ufoElement.style.opacity = '1';
+            ufoElement.classList.remove('warning');
+            ufoElement.classList.add('flying');
+            isUfoExploding = false;
+        }
+
+        function animateUfo() {
+            if (!isUfoExploding) {
+                var heroWidth = heroSection.offsetWidth;
+                var ufoWidth = ufoElement.offsetWidth;
+
+                // Move UFO
+                ufoX += ufoSpeed * ufoDirection;
+
+                // Bounce at edges
+                if (ufoX > heroWidth - ufoWidth + 20) {
+                    ufoDirection = -1;
+                } else if (ufoX < -20) {
+                    ufoDirection = 1;
+                }
+
+                ufoElement.style.left = ufoX + 'px';
+            }
+
+            ufoAnimationId = requestAnimationFrame(animateUfo);
+        }
+
+        function handleUfoClick(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (isUfoExploding) return;
+
+            isUfoExploding = true;
+            ufoElement.classList.remove('flying');
+            ufoElement.classList.add('warning');
+
+            playWarningSound();
+
+            // Explode after warning
+            setTimeout(explodeUfo, 800);
+        }
+
+        function explodeUfo() {
+            var rect = ufoElement.getBoundingClientRect();
+            var centerX = rect.left + rect.width / 2;
+            var centerY = rect.top + rect.height / 2;
+
+            playExplosionSound();
+
+            // Screen flash
+            var flash = document.createElement('div');
+            flash.className = 'explosion-flash';
+            document.body.appendChild(flash);
+            setTimeout(function() { flash.remove(); }, 400);
+
+            // Particles
+            var colors = ['#FF6B35', '#FFD90F', '#FF3B3B', '#FF8C00', '#FFA500', '#FF4444'];
+            for (var i = 0; i < 18; i++) {
+                createParticle(centerX, centerY, colors[Math.floor(Math.random() * colors.length)], i);
+            }
+
+            // Hide UFO
+            ufoElement.style.display = 'none';
+
+            // Respawn after 3 seconds
+            setTimeout(resetUfoPosition, 3000);
+        }
+
+        function createParticle(x, y, color, index) {
+            var particle = document.createElement('div');
+            particle.className = 'ufo-particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.background = color;
+            particle.style.width = '12px';
+            particle.style.height = '12px';
+            particle.style.boxShadow = '0 0 6px ' + color;
+
+            document.body.appendChild(particle);
+
+            var angle = (index / 18) * Math.PI * 2;
+            var velocity = 6 + Math.random() * 6;
+            var dx = Math.cos(angle) * velocity;
+            var dy = Math.sin(angle) * velocity;
+            var px = x;
+            var py = y;
+            var opacity = 1;
+            var size = 12;
+
+            function animateParticle() {
+                px += dx;
+                py += dy;
+                dy += 0.3;
+                opacity -= 0.025;
+                size *= 0.96;
+
+                particle.style.left = px + 'px';
+                particle.style.top = py + 'px';
+                particle.style.opacity = opacity;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+
+                if (opacity > 0) {
+                    requestAnimationFrame(animateParticle);
+                } else {
+                    particle.remove();
+                }
+            }
+
+            requestAnimationFrame(animateParticle);
+        }
+
+        function playWarningSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+                // Siren sweep
+                var osc = audioCtx.createOscillator();
+                var gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sawtooth';
+
+                var now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.15);
+                osc.frequency.linearRampToValueAtTime(400, now + 0.3);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.45);
+                osc.frequency.linearRampToValueAtTime(400, now + 0.6);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.75);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.setValueAtTime(0.2, now + 0.7);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+                osc.start(now);
+                osc.stop(now + 0.8);
+            } catch (e) {}
+        }
+
+        function playExplosionSound() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+                var now = audioCtx.currentTime;
+
+                // Deep boom
+                var osc1 = audioCtx.createOscillator();
+                var gain1 = audioCtx.createGain();
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(150, now);
+                osc1.frequency.exponentialRampToValueAtTime(30, now + 0.5);
+                gain1.gain.setValueAtTime(0.5, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                osc1.start(now);
+                osc1.stop(now + 0.5);
+
+                // Crackle
+                var osc2 = audioCtx.createOscillator();
+                var gain2 = audioCtx.createGain();
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(800, now);
+                osc2.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+                gain2.gain.setValueAtTime(0.2, now);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                osc2.start(now);
+                osc2.stop(now + 0.2);
+            } catch (e) {}
+        }
+
+        // ========== NAVBAR SCROLL EFFECT ========== //
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('navbar');
+            if (navbar) {
+                if (window.pageYOffset > 50) {
+                    navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,.4)';
+                } else {
+                    navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,.3)';
+                }
+            }
+        });
+
+        // ========== INITIALIZE ON LOAD ========== //
+        window.addEventListener('load', function() {
+            initFlyingUfo();
+            setTimeout(revealOnScroll, 200);
+        });
+    </script>
+
+</body>
+</html>

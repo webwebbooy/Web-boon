@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | WEB-BOON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    
+    <!-- EMAILJS LIBRARY -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        /* ======================== */
+        /* BASE STYLES */
+        /* ======================== */
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Bangers',cursive;background:#FFF8F0;color:#3D2C2E;overflow-x:hidden}
+        a{text-decoration:none;color:inherit}
+        button{cursor:pointer;border:none;background:none;font-family:'Bangers',cursive}
+
+        /* ======================== */
+        /* NAVBAR */
+        /* ======================== */
+        .navbar{position:sticky;top:0;z-index:1000;background:rgba(61,44,46,.95);backdrop-filter:blur(10px);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:4px solid #000;box-shadow:0 2px 10px rgba(0,0,0,.3);transition:box-shadow .3s}
+        .nav-logo{font-size:36px;color:#FF6B35;letter-spacing:2px;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;animation:logoPop 2.5s ease-in-out infinite}
+        .nav-links{display:flex;gap:8px}
+        .nav-links a{font-size:18px;color:#FFF8F0;padding:8px 18px;border-radius:10px;border:3px solid transparent;transition:all .3s}
+        .nav-links a:hover{color:#FF6B35;border-color:#FF6B35;background:rgba(255,107,53,.1)}
+        .nav-links a.active{color:#FFF;background:#FF6B35;border-color:#000;box-shadow:3px 3px 0 #000}
+
+        /* ======================== */
+        /* UFO MENU BUTTON */
+        /* ======================== */
+        .ufo-menu-btn{display:none;width:52px;height:70px;position:relative;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5px;animation:ufoFloat 3s ease-in-out infinite}
+        .ufo-dome{width:22px;height:14px;background:linear-gradient(180deg,#87CEEB,#5CB8E6);border:2.5px solid #000;border-radius:50% 50% 0 0;position:relative;z-index:2}
+        .ufo-saucer{width:44px;height:14px;background:linear-gradient(180deg,#C0C0C0,#A0A0A0);border:2.5px solid #000;border-radius:50%;margin-top:-4px;position:relative;z-index:2}
+        .ufo-lights{display:flex;gap:6px;margin-top:-2px;position:relative;z-index:2}
+        .ufo-light{width:6px;height:6px;border-radius:50%;animation:ufoLights 1.5s infinite}
+        .ufo-light:nth-child(1){background:#FF6B35;box-shadow:0 0 8px #FF6B35,0 0 15px #FF6B35}
+        .ufo-light:nth-child(2){background:#FFD90F;box-shadow:0 0 8px #FFD90F,0 0 15px #FFD90F;animation-delay:.3s}
+        .ufo-light:nth-child(3){background:#4ADE80;box-shadow:0 0 8px #4ADE80,0 0 15px #4ADE80;animation-delay:.6s}
+        .ufo-beam{position:absolute;top:28px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:15px solid transparent;border-right:15px solid transparent;border-top:25px solid rgba(255,217,15,0.4);filter:blur(2px);animation:beamPulse 2s ease-in-out infinite;z-index:1}
+
+        /* ======================== */
+        /* MOBILE MENU */
+        /* ======================== */
+        .mobile-menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(61,44,46,.97);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;z-index:1001;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .mobile-menu-overlay.active{opacity:1;visibility:visible}
+        .mobile-menu-close.ufo-close{position:absolute;top:25px;right:25px;width:50px;height:60px;animation:ufoFloat 2s infinite;cursor:pointer}
+        .close-ufo-dome{width:22px;height:12px;background:#E0E0E0;border:2px solid #000;border-radius:15px 15px 0 0;position:absolute;top:5px;left:50%;transform:translateX(-50%);z-index:2}
+        .close-ufo-saucer{width:40px;height:12px;background:#C0C0C0;border:2px solid #000;border-radius:50%;position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:2}
+        .close-ufo-lights{display:flex;gap:5px;position:absolute;top:28px;left:50%;transform:translateX(-50%);z-index:2}
+        .close-ufo-light{width:4px;height:4px;border-radius:50%;animation:ufoLights 1.2s infinite}
+        .close-ufo-light:nth-child(1){background:#FF6B35}
+        .close-ufo-light:nth-child(2){background:#FFD90F;animation-delay:.2s}
+        .close-ufo-light:nth-child(3){background:#4ADE80;animation-delay:.4s}
+        .close-ufo-beam{position:absolute;top:32px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:20px solid rgba(255,217,15,0.4);filter:blur(2px);animation:beamPulse 1.5s ease-in-out infinite}
+        .mobile-menu-overlay a{font-size:32px;color:#FFF;padding:12px 30px;border-radius:10px;border:3px solid transparent;transition:all .3s;transform:translateY(20px);opacity:0}
+        .mobile-menu-overlay.active a{transform:translateY(0);opacity:1}
+        .mobile-menu-overlay.active a:nth-child(2){transition-delay:.1s}
+        .mobile-menu-overlay.active a:nth-child(3){transition-delay:.2s}
+        .mobile-menu-overlay.active a:nth-child(4){transition-delay:.3s}
+        .mobile-menu-overlay.active a:nth-child(5){transition-delay:.4s}
+        .mobile-menu-overlay a:hover{color:#FF6B35;border-color:#FF6B35}
+
+        /* ======================== */
+        /* KEYFRAMES */
+        /* ======================== */
+        @keyframes logoPop{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.03) rotate(-2deg)}}
+        @keyframes ufoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes ufoLights{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+        @keyframes beamPulse{0%,100%{opacity:0.6;transform:translateX(-50%) scaleY(1)}50%{opacity:0.9;transform:translateX(-50%) scaleY(1.15)}}
+        @keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        @keyframes phoneBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        @keyframes phoneRing{0%,100%{transform:rotate(-3deg)}25%{transform:rotate(3deg)}50%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+        @keyframes screenGlow{0%,100%{box-shadow:inset 0 0 10px rgba(74,222,128,0.5)}50%{box-shadow:inset 0 0 20px rgba(74,222,128,0.8),0 0 15px rgba(74,222,128,0.4)}}
+        @keyframes gentlePop{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+        @keyframes floatTool{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+        @keyframes shimmerSlide{0%{transform:translateX(-100%) rotate(25deg)}100%{transform:translateX(200%) rotate(25deg)}}
+        @keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+
+        /* ======================== */
+        /* HERO SECTION */
+        /* ======================== */
+        .hero-section{background:linear-gradient(180deg,#FFF8F0,#FFE8D6);padding:50px 20px 60px;text-align:center}
+        .hero-content{margin-bottom:40px}
+        .hero-heading{font-size:52px;color:#FF6B35;text-shadow:3px 3px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;margin-bottom:10px;animation:gentlePop 4s ease-in-out infinite}
+        .hero-subtext{font-size:20px;color:#3D2C2E;opacity:.85}
+
+        /* ======================== */
+        /* PHONE SCENE */
+        /* ======================== */
+        .phone-scene{display:flex;align-items:center;justify-content:center;gap:50px;flex-wrap:wrap;margin-top:20px}
+        .phone-wrapper{display:flex;flex-direction:column;align-items:center}
+
+        .cartoon-phone{width:80px;height:140px;background:linear-gradient(180deg,#FF6B35,#E55A2B);border:4px solid #000;border-radius:15px;position:relative;cursor:pointer;box-shadow:5px 5px 0 #000;transition:all .2s ease}
+        .cartoon-phone:hover{transform:scale(1.05);box-shadow:6px 6px 0 #000}
+        .cartoon-phone:active{transform:scale(0.98);box-shadow:3px 3px 0 #000}
+        .cartoon-phone.ringing{animation:phoneRing 0.1s infinite}
+        .cartoon-phone.ringing .phone-screen{animation:screenGlow 0.5s infinite}
+
+        .phone-speaker{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:30px;height:4px;background:#000;border-radius:2px}
+        .phone-screen{position:absolute;top:18px;left:8px;right:8px;bottom:30px;background:linear-gradient(180deg,#1a1a2e,#2d2d44);border:3px solid #000;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+        .screen-icon{font-size:35px;animation:iconBounce 2s ease-in-out infinite}
+        .phone-button{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:20px;height:20px;background:linear-gradient(180deg,#FFD90F,#E5C40E);border:3px solid #000;border-radius:50%}
+
+        .cartoon-phone.active{animation:phoneBounce .3s ease}
+        .cartoon-phone.active .phone-screen{background:linear-gradient(180deg,#4ADE80,#3DD672)}
+
+        .tap-hint{margin-top:15px;font-size:16px;color:#3D2C2E;opacity:.7;animation:iconBounce 2s infinite}
+
+        .message-box{width:280px;min-height:150px;background:#FFF;border:4px solid #000;border-radius:18px;padding:25px;box-shadow:5px 5px 0 #000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:all .3s;opacity:0.6}
+        .message-box.active{opacity:1;border-color:#FF6B35;box-shadow:5px 5px 0 #FF6B35}
+        .msg-icon{font-size:40px;margin-bottom:12px}
+        .msg-text{font-size:18px;color:#3D2C2E;line-height:1.4;letter-spacing:1px}
+
+        /* ======================== */
+        /* CONTACT FORM SECTION */
+        /* ======================== */
+        .contact-section{max-width:1000px;margin:0 auto;padding:50px 20px}
+        .contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:30px}
+
+        .form-card{background:#FFF;border:4px solid #000;border-radius:18px;padding:30px;box-shadow:5px 5px 0 #000;opacity:0;transform:translateY(30px);transition:all .5s}
+        .form-card.revealed{opacity:1;transform:translateY(0)}
+        .form-title{font-size:28px;color:#FF6B35;text-shadow:2px 2px 0 #000;margin-bottom:20px}
+
+        .input-group{margin-bottom:18px}
+        .input-group label{display:block;font-size:16px;margin-bottom:6px;color:#3D2C2E}
+        .input-group input,.input-group textarea{width:100%;padding:12px;font-family:'Bangers',cursive;font-size:16px;letter-spacing:1px;border:3px solid #000;border-radius:10px;background:#FFF8F0;transition:all .3s;color:#3D2C2E}
+        .input-group input:focus,.input-group textarea:focus{outline:none;border-color:#FF6B35;box-shadow:3px 3px 0 #FF6B35}
+        .input-group input::placeholder,.input-group textarea::placeholder{color:#999;opacity:0.7}
+        .input-group textarea{resize:vertical;min-height:100px}
+
+        .submit-btn{width:100%;padding:14px;font-size:20px;color:#FFF;background:#FF6B35;border:4px solid #000;border-radius:12px;box-shadow:4px 4px 0 #000;transition:all .3s;cursor:pointer;letter-spacing:1px}
+        .submit-btn:hover{transform:translateY(-2px);box-shadow:4px 6px 0 #000}
+        .submit-btn:active{transform:translateY(0);box-shadow:2px 2px 0 #000}
+        .submit-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none}
+
+        .info-card{opacity:0;transform:translateY(30px);transition:all .5s .1s}
+        .info-card.revealed{opacity:1;transform:translateY(0)}
+        .info-title{font-size:28px;color:#FF6B35;text-shadow:2px 2px 0 #000;margin-bottom:20px}
+        .info-item{display:flex;align-items:center;gap:12px;background:#FFF;border:3px solid #000;border-radius:12px;padding:15px;margin-bottom:12px;box-shadow:4px 4px 0 #000;transition:all .3s}
+        .info-item:hover{transform:translateY(-3px);box-shadow:4px 7px 0 #000}
+        .info-item span{font-size:28px}
+        .info-item p{font-size:16px;color:#3D2C2E}
+
+        /* ======================== */
+        /* CUSTOMIZE CARD SECTION - NEW */
+        /* ======================== */
+        .customize-section{max-width:1000px;margin:0 auto;padding:0 20px 50px}
+
+        .customize-card{
+            background:linear-gradient(135deg,#3D2C2E 0%,#5a3f42 100%);
+            border:4px solid #000;
+            border-radius:20px;
+            padding:40px;
+            box-shadow:6px 6px 0 #000;
+            display:flex;
+            align-items:center;
+            gap:35px;
+            position:relative;
+            overflow:hidden;
+            cursor:pointer;
+            transition:all .3s ease;
+            opacity:0;
+            transform:translateY(30px)
+        }
+        .customize-card.revealed{opacity:1;transform:translateY(0)}
+        .customize-card:hover{transform:translateY(-5px);box-shadow:6px 11px 0 #000}
+        .customize-card.revealed:hover{transform:translateY(-5px)}
+
+        /* Shimmer effect */
+        .customize-card::before{
+            content:'';
+            position:absolute;
+            top:0;
+            left:-100%;
+            width:60px;
+            height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+            animation:shimmerSlide 4s ease-in-out infinite;
+        }
+
+        /* Floating tools */
+        .customize-floating{position:absolute;font-size:30px;opacity:.15;pointer-events:none}
+        .customize-floating:nth-child(1){top:10%;right:5%;animation:floatTool 3s ease-in-out infinite}
+        .customize-floating:nth-child(2){top:60%;right:12%;animation:floatTool 4s ease-in-out infinite 1s}
+        .customize-floating:nth-child(3){bottom:10%;right:20%;animation:floatTool 3.5s ease-in-out infinite .5s}
+
+        .customize-icon-box{
+            width:90px;
+            height:90px;
+            background:linear-gradient(135deg,#FF6B35,#FFD90F);
+            border:4px solid #000;
+            border-radius:20px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
+            box-shadow:4px 4px 0 #000;
+        }
+        .customize-icon-box span{font-size:42px;animation:iconBounce 3s ease-in-out infinite}
+
+        .customize-text-area{flex:1;position:relative;z-index:2}
+        .customize-label{font-size:14px;color:#FFD90F;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase}
+        .customize-heading{font-size:30px;color:#FFF8F0;text-shadow:2px 2px 0 #000;margin-bottom:8px;letter-spacing:1px}
+        .customize-desc{font-size:16px;color:rgba(255,248,240,.7);line-height:1.4;letter-spacing:.5px;margin-bottom:15px}
+
+        .customize-features{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+        .customize-feature-tag{background:rgba(255,107,53,.2);color:#FFD90F;font-size:13px;padding:5px 12px;border-radius:8px;border:2px solid rgba(255,107,53,.4);letter-spacing:.5px}
+
+        .customize-btn{
+            display:inline-flex;
+            align-items:center;
+            gap:10px;
+            background:#FF6B35;
+            color:#FFF;
+            font-size:20px;
+            font-family:'Bangers',cursive;
+            padding:12px 28px;
+            border:4px solid #000;
+            border-radius:12px;
+            box-shadow:4px 4px 0 #000;
+            transition:all .3s;
+            letter-spacing:1px;
+            position:relative;
+            z-index:2;
+        }
+        .customize-btn:hover{transform:translateY(-2px);box-shadow:4px 6px 0 #000;background:#e55a2b}
+        .customize-btn .arrow{animation:arrowBounce 1s ease-in-out infinite}
+
+        /* OR Divider */
+        .or-divider{
+            display:flex;
+            align-items:center;
+            gap:15px;
+            max-width:1000px;
+            margin:0 auto 30px;
+            padding:0 20px;
+        }
+        .or-line{flex:1;height:3px;background:linear-gradient(90deg,transparent,#FFD90F,transparent);border-radius:2px}
+        .or-text{font-size:20px;color:#FF6B35;letter-spacing:3px}
+
+        /* ======================== */
+        /* CTA SECTION */
+        /* ======================== */
+        .cta-section{background:#FFD90F;border-top:4px solid #000;border-bottom:4px solid #000;padding:50px 20px;text-align:center;opacity:0;transform:translateY(30px);transition:all .5s}
+        .cta-section.revealed{opacity:1;transform:translateY(0)}
+        .cta-heading{font-size:38px;color:#3D2C2E;margin-bottom:10px}
+        .cta-subtext{font-size:18px;margin-bottom:20px;opacity:.8}
+        .cta-btn{display:inline-block;background:#3D2C2E;color:#FFD90F;font-size:20px;padding:12px 35px;border:4px solid #000;border-radius:12px;box-shadow:4px 4px 0 #000;transition:all .3s}
+        .cta-btn:hover{transform:translateY(-3px);box-shadow:4px 7px 0 #000}
+
+        /* ======================== */
+        /* FOOTER */
+        /* ======================== */
+        .footer{background:#3D2C2E;color:#FFF8F0;padding:40px 20px 20px;border-top:4px solid #000}
+        .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1000px;margin:0 auto}
+        .footer-col h3{font-size:22px;color:#FFD90F;margin-bottom:12px}
+        .footer-col p{font-size:15px;opacity:.8;line-height:1.7}
+        .footer-logo{font-size:26px;color:#FF6B35;text-shadow:2px 2px 0 #000;display:block;margin-bottom:8px}
+        .footer-links{display:flex;flex-direction:column;gap:5px}
+        .footer-links a{font-size:15px;opacity:.8;transition:all .3s}
+        .footer-links a:hover{color:#FF6B35;opacity:1}
+        .footer-bottom{text-align:center;margin-top:25px;padding-top:15px;border-top:2px solid rgba(255,255,255,.1)}
+        .footer-bottom p{font-size:14px;opacity:.5}
+
+        /* ======================== */
+        /* RESPONSIVE */
+        /* ======================== */
+        @media(max-width:768px){
+            .nav-links{display:none}
+            .ufo-menu-btn{display:flex}
+            .phone-scene{flex-direction:column;gap:25px}
+            .contact-grid{grid-template-columns:1fr}
+            .footer-grid{grid-template-columns:1fr;text-align:center}
+            .footer-links{align-items:center}
+            .hero-heading{font-size:38px}
+            .message-box{width:260px}
+
+            .customize-card{flex-direction:column;text-align:center;padding:30px 25px}
+            .customize-icon-box{width:75px;height:75px}
+            .customize-icon-box span{font-size:35px}
+            .customize-heading{font-size:26px}
+            .customize-features{justify-content:center}
+            .customize-btn{width:100%;justify-content:center}
+            .customize-floating{display:none}
+        }
+        @media(max-width:480px){
+            .hero-heading{font-size:32px}
+            .cartoon-phone{width:70px;height:120px}
+            .message-box{width:240px;padding:20px}
+            .msg-text{font-size:16px}
+            .mobile-menu-overlay a{font-size:28px;padding:10px 25px}
+            .customize-heading{font-size:22px}
+            .customize-desc{font-size:14px}
+            .customize-btn{font-size:18px;padding:10px 22px}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">WEB-BOON</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="packages.html">Packages</a>
+            <a href="contact.html" class="active">Contact</a>
+        </div>
+        <button class="ufo-menu-btn" id="ufoMenuBtn">
+            <div class="ufo-dome"></div>
+            <div class="ufo-saucer"></div>
+            <div class="ufo-lights">
+                <div class="ufo-light"></div>
+                <div class="ufo-light"></div>
+                <div class="ufo-light"></div>
+            </div>
+            <div class="ufo-beam"></div>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <button class="mobile-menu-close ufo-close" id="closeMenuBtn">
+            <div class="close-ufo-dome"></div>
+            <div class="close-ufo-saucer"></div>
+            <div class="close-ufo-lights">
+                <div class="close-ufo-light"></div>
+                <div class="close-ufo-light"></div>
+                <div class="close-ufo-light"></div>
+            </div>
+            <div class="close-ufo-beam"></div>
+        </button>
+        <a href="index.html">Home</a>
+        <a href="services.html">Services</a>
+        <a href="packages.html">Packages</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- HERO WITH PHONE -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-heading">Get In Touch</h1>
+            <p class="hero-subtext">Tap the phone to see who's calling!</p>
+        </div>
+
+        <div class="phone-scene">
+            <div class="phone-wrapper">
+                <div class="cartoon-phone" id="cartoonPhone">
+                    <div class="phone-speaker"></div>
+                    <div class="phone-screen">
+                        <div class="screen-icon">📞</div>
+                    </div>
+                    <div class="phone-button"></div>
+                </div>
+                <p class="tap-hint">👆 Tap phone!</p>
+            </div>
+
+            <div class="message-box" id="messageBox">
+                <span class="msg-icon">💬</span>
+                <p class="msg-text" id="msgText">Tap the phone to see who needs a website!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section class="contact-section">
+        <div class="contact-grid">
+            <div class="form-card reveal" id="formCard">
+                <h2 class="form-title">Send Message</h2>
+                <form id="contactForm">
+                    <div class="input-group">
+                        <label for="fromName">Your Name</label>
+                        <input type="text" id="fromName" name="from_name" placeholder="Walter White" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="fromEmail">Email</label>
+                        <input type="email" id="fromEmail" name="from_email" placeholder="walter@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+91 98765 43210">
+                    </div>
+                    <div class="input-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Tell us about your project..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submitBtn">Send 🚀</button>
+                </form>
+            </div>
+
+            <div class="info-card reveal" id="infoCard">
+                <h2 class="info-title">Contact Info</h2>
+                <div class="info-item">
+                    <span>📧</span>
+                    <p>heisenberg.webboon@gmail.com</p>
+                </div>
+                <div class="info-item">
+                    <span>📍</span>
+                    <p>Azamgarh, Uttar Pradesh</p>
+                </div>
+                <div class="info-item">
+                    <span>⏰</span>
+                    <p>Mon - Sat: 10AM - 8PM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- NEW: CUSTOMIZE YOUR WEBSITE CARD -->
+    <!-- ======================== -->
+    <div class="or-divider">
+        <div class="or-line"></div>
+        <span class="or-text">OR</span>
+        <div class="or-line"></div>
+    </div>
+
+    <section class="customize-section">
+        <a href="customize.html" style="text-decoration:none">
+            <div class="customize-card reveal" id="customizeCard">
+                <!-- Floating background icons -->
+                <span class="customize-floating">⚙️</span>
+                <span class="customize-floating">🎨</span>
+                <span class="customize-floating">✨</span>
+
+                <!-- Icon Box -->
+                <div class="customize-icon-box">
+                    <span>🎨</span>
+                </div>
+
+                <!-- Text Content -->
+                <div class="customize-text-area">
+                    <p class="customize-label">✨ Project Builder</p>
+                    <h3 class="customize-heading">Customize Your Dream Website</h3>
+                    <p class="customize-desc">Tell us exactly what you need — website type, design style, pages, features & get an instant price estimate!</p>
+                    
+                    <div class="customize-features">
+                        <span class="customize-feature-tag">📄 Choose Pages</span>
+                        <span class="customize-feature-tag">🎨 Pick Design</span>
+                        <span class="customize-feature-tag">✨ Add Features</span>
+                        <span class="customize-feature-tag">💰 Live Pricing</span>
+                    </div>
+
+                    <div class="customize-btn">
+                        Build Your Quote <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section reveal" id="ctaSection">
+        <h2 class="cta-heading">Ready to Start?</h2>
+        <p class="cta-subtext">Let's build something amazing!</p>
+        <a href="packages.html" class="cta-btn">View Packages</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="footer-logo">WEB-BOON</span>
+                <p>Professional websites for your business</p>
+                <p style="margin-top:8px">📍 Azamgarh, Uttar Pradesh</p>
+            </div>
+            <div class="footer-col">
+                <h3>Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Services</a>
+                    <a href="packages.html">Packages</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <p>📧 heisenberg.webboon@gmail.com</p>
+                <p>📍 Azamgarh, UP</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 WEB-BOON | By Heisenberg</p>
+        </div>
+    </footer>
+
+    <script>
+        // ========================
+        // AUDIO SYSTEM
+        // ========================
+        var audioCtx = null;
+
+        function ensureAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playClickSound() {
+            try {
+                ensureAudio();
+                var o = audioCtx.createOscillator();
+                var g = audioCtx.createGain();
+                o.connect(g);
+                g.connect(audioCtx.destination);
+                o.type = 'sine';
+                o.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                o.start();
+                o.stop(audioCtx.currentTime + 0.08);
+            } catch (e) {}
+        }
+
+        function playRingSound() {
+            try {
+                ensureAudio();
+                var now = audioCtx.currentTime;
+                var o1 = audioCtx.createOscillator();
+                var g1 = audioCtx.createGain();
+                o1.connect(g1); g1.connect(audioCtx.destination);
+                o1.type = 'sine';
+                o1.frequency.setValueAtTime(440, now);
+                g1.gain.setValueAtTime(0.2, now);
+                g1.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                o1.start(now); o1.stop(now + 0.15);
+
+                var o2 = audioCtx.createOscillator();
+                var g2 = audioCtx.createGain();
+                o2.connect(g2); g2.connect(audioCtx.destination);
+                o2.type = 'sine';
+                o2.frequency.setValueAtTime(520, now);
+                g2.gain.setValueAtTime(0.15, now);
+                g2.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                o2.start(now); o2.stop(now + 0.15);
+
+                var o3 = audioCtx.createOscillator();
+                var g3 = audioCtx.createGain();
+                o3.connect(g3); g3.connect(audioCtx.destination);
+                o3.type = 'sine';
+                o3.frequency.setValueAtTime(440, now + 0.18);
+                g3.gain.setValueAtTime(0.2, now + 0.18);
+                g3.gain.exponentialRampToValueAtTime(0.001, now + 0.33);
+                o3.start(now + 0.18); o3.stop(now + 0.33);
+
+                var o4 = audioCtx.createOscillator();
+                var g4 = audioCtx.createGain();
+                o4.connect(g4); g4.connect(audioCtx.destination);
+                o4.type = 'sine';
+                o4.frequency.setValueAtTime(520, now + 0.18);
+                g4.gain.setValueAtTime(0.15, now + 0.18);
+                g4.gain.exponentialRampToValueAtTime(0.001, now + 0.33);
+                o4.start(now + 0.18); o4.stop(now + 0.33);
+            } catch (e) {}
+        }
+
+        function playSuccessSound() {
+            try {
+                ensureAudio();
+                var notes = [523, 659, 784, 1047];
+                notes.forEach(function(freq, i) {
+                    var o = audioCtx.createOscillator();
+                    var g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.12);
+                    g.gain.setValueAtTime(0, audioCtx.currentTime);
+                    g.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + i * 0.12);
+                    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.12 + 0.3);
+                    o.start(audioCtx.currentTime + i * 0.12);
+                    o.stop(audioCtx.currentTime + i * 0.12 + 0.3);
+                });
+            } catch (e) {}
+        }
+
+        // ========================
+        // MOBILE MENU
+        // ========================
+        var mobileMenu = document.getElementById('mobileMenu');
+        var ufoMenuBtn = document.getElementById('ufoMenuBtn');
+        var closeMenuBtn = document.getElementById('closeMenuBtn');
+
+        function toggleMobileMenu() {
+            playClickSound();
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            playClickSound();
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        ufoMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenuBtn.addEventListener('click', closeMobileMenu);
+
+        document.querySelectorAll('.mobile-menu-overlay a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) closeMobileMenu();
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+
+        // ========================
+        // CARTOON PHONE INTERACTION
+        // ========================
+        var characters = [
+            "Gus needs a website for Los Pollos Hermanos!",
+            "Tony Stark needs a website for Stark Industries!",
+            "Jon Snow needs a website for the Night's Watch!",
+            "Sukuna needs a website for his cursed domain!",
+            "Homelander needs a website for Vought International!",
+            "Naruto needs a website, believe it!",
+            "Bulma needs a website for Capsule Corp!",
+            "Gamora needs a website for the Guardians!",
+            "Sakura needs a website for Hidden Leaf Hospital!",
+            "Shinchan needs a website for Action Kamen fan club!",
+            "Shizuka needs a website for her violin classes!",
+            "Kalu needs a website for his chai tapri!"
+        ];
+
+        var messageShowing = false;
+        var currentIndex = -1;
+        var ringInterval = null;
+
+        var cartoonPhone = document.getElementById('cartoonPhone');
+        var messageBox = document.getElementById('messageBox');
+        var msgText = document.getElementById('msgText');
+
+        function getRandomMessage() {
+            var newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * characters.length);
+            } while (newIndex === currentIndex && characters.length > 1);
+            currentIndex = newIndex;
+            return characters[currentIndex];
+        }
+
+        function startRinging() {
+            cartoonPhone.classList.add('ringing');
+            playRingSound();
+            ringInterval = setInterval(playRingSound, 600);
+        }
+
+        function stopRinging() {
+            cartoonPhone.classList.remove('ringing');
+            if (ringInterval) {
+                clearInterval(ringInterval);
+                ringInterval = null;
+            }
+        }
+
+        function handlePhoneTap(e) {
+            if (e) e.preventDefault();
+            playClickSound();
+
+            if (messageShowing) {
+                messageShowing = false;
+                stopRinging();
+                cartoonPhone.classList.remove('active');
+                messageBox.classList.remove('active');
+                msgText.textContent = "Tap the phone to see who needs a website!";
+            } else {
+                messageShowing = true;
+                cartoonPhone.classList.add('active');
+                messageBox.classList.add('active');
+                msgText.textContent = getRandomMessage();
+                startRinging();
+                setTimeout(function() { stopRinging(); }, 2000);
+            }
+        }
+
+        cartoonPhone.addEventListener('click', handlePhoneTap);
+        cartoonPhone.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            handlePhoneTap();
+        }, { passive: false });
+
+        // ========================
+        // EMAILJS
+        // ========================
+        (function() {
+            emailjs.init('rceNlGB6t-9CKEBbe');
+        })();
+
+        var contactForm = document.getElementById('contactForm');
+        var submitBtn = document.getElementById('submitBtn');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            playClickSound();
+
+            var originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending... ✈️';
+            submitBtn.disabled = true;
+
+            emailjs.sendForm('service_1fnr04y', 'template_mnnsf1l', contactForm)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                playSuccessSound();
+                submitBtn.textContent = 'Sent! ✅';
+                submitBtn.style.background = '#4ADE80';
+                contactForm.reset();
+
+                setTimeout(function() {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = '#FF6B35';
+                    submitBtn.disabled = false;
+                }, 3000);
+            }, function(error) {
+                console.log('FAILED...', error);
+                submitBtn.textContent = 'Failed ❌ Try Again';
+                submitBtn.style.background = '#FF3B3B';
+
+                setTimeout(function() {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = '#FF6B35';
+                    submitBtn.disabled = false;
+                }, 3000);
+            });
+        });
+
+        // ========================
+        // REVEAL ON SCROLL
+        // ========================
+        function revealElements() {
+            var reveals = document.querySelectorAll('.reveal, .form-card, .info-card, .cta-section, .customize-card');
+            var windowHeight = window.innerHeight;
+
+            reveals.forEach(function(el) {
+                var elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add('revealed');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealElements);
+        window.addEventListener('load', function() {
+            setTimeout(revealElements, 200);
+        });
+
+        // ========================
+        // NAVBAR SCROLL SHADOW
+        // ========================
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,.5)';
+            } else {
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,.3)';
+            }
+        });
+    </script>
+</body>
+</html>
